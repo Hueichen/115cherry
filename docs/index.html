@@ -205,11 +205,12 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .video{margin-top:1rem;aspect-ratio:16/9;width:100%;border:0;border-radius:10px;background:#000}
 
 /* 須知 */
-.rules{margin:0;padding:0;list-style:none;counter-reset:r}
-.rules li{counter-increment:r;position:relative;padding:0 0 1.1rem 3rem;max-width:44em}
+.rules{margin:0;padding:0;list-style:none}
+.rules li{position:relative;padding:0 0 1.1rem 2.6rem}
+.rules .prose p{max-width:none}
 .rules li::before{
-  content:counter(r);position:absolute;left:0;top:.1rem;width:2.1rem;height:2.1rem;border-radius:50%;
-  background:var(--cherry);color:#fff;font-weight:700;display:grid;place-items:center;font-size:1rem;line-height:1;
+  content:"";position:absolute;left:0;top:.05rem;width:1.9rem;height:1.9rem;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2040%2040%27%3E%3Cpath%20d%3D%27M21%205C18%2012%2014%2017%2012%2023M21%205c1%207%204%2013%207%2018%27%20stroke%3D%27%234E8A3F%27%20stroke-width%3D%272.6%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M21%205c5-4%2011-3%2014%201-5%203-10%203-14-1z%27%20fill%3D%27%2379B85F%27/%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23C8283F%27/%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23E2445C%27/%3E%3Cellipse%20cx%3D%279.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3Cellipse%20cx%3D%2725.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3C/svg%3E") center/contain no-repeat;
 }
 .rules strong{display:block;font-size:1.1rem}
 
@@ -339,9 +340,16 @@ const MENU = [
       { id:'calendar', label:'行事曆',   href:'#/board/calendar' },
       { id:'leave',    label:'請假須知', href:'#/board/leave' },
       { id:'pickup',   label:'接送須知', href:'#/board/pickup' },
-      { id:'medicine', label:'托藥須知', href:'#/board/medicine' } ] }
+      { id:'medicine', label:'托藥須知', href:'#/board/medicine' },
+      { id:'health',   label:'衛教宣導', href:'#/board/health' } ] }
 ];
-const NOTICE_TYPES = { leave:'請假', pickup:'接送', medicine:'托藥' };
+// 網址代號 → 試算表「須知」分頁的「類別」、頁面標題
+const NOTICE_TYPES = {
+  leave:    { cat:'請假', title:'請假須知' },
+  pickup:   { cat:'接送', title:'接送須知' },
+  medicine: { cat:'托藥', title:'托藥須知' },
+  health:   { cat:'衛教', title:'衛教宣導' }
+};
 
 /* ---------- 小工具 ---------- */
 const $ = s => document.querySelector(s);
@@ -383,20 +391,28 @@ const WEEKDAY = ['日','一','二','三','四','五','六'];
 /* ---------- 讀取資料 ---------- */
 const DATA = {};
 const DATA_KEYS = ['weekly','songs','rhymes','gallery','books','calendar','notices'];
-async function loadAll(){
-  if (!CONFIG.API_URL){ Object.assign(DATA, DEMO); return 'demo'; }
+const CACHE_KEY = 'cherry-data-v1';     // 上次讀到的資料存在瀏覽器，下次先秀出來
+
+async function fetchRemote(){
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 20000);
   let res;
-  try { res = await fetch(CONFIG.API_URL, { cache:'no-store' }); }   // 不要加自訂標頭，否則會被跨網域擋下
+  try { res = await fetch(CONFIG.API_URL, { cache:'no-store', signal:ctrl.signal }); }   // 不要加自訂標頭，否則會被跨網域擋下
   catch { throw new Error('連不到資料來源，請確認 API_URL 是否正確，以及 Apps Script 的存取權是否設為「所有人」。'); }
+  finally { clearTimeout(timer); }
   if (!res.ok) throw new Error(`資料來源回應錯誤（${res.status}）`);
   let json;
   try { json = await res.json(); }
   catch { throw new Error('資料來源回傳的不是資料，可能是 Apps Script 尚未授權或存取權不是「所有人」。'); }
   if (!json.ok) throw new Error(`試算表讀取錯誤：${json.error}`);
-  DATA_KEYS.forEach(k => DATA[k] = Array.isArray(json.data[k]) ? json.data[k] : []);
-  DATA.updated = json.updated;
-  return 'sheet';
+  return json;
 }
+function applyData(json){
+  DATA_KEYS.forEach(k => DATA[k] = Array.isArray(json.data && json.data[k]) ? json.data[k] : []);
+  DATA.updated = json.updated;
+}
+function readCache(){ try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
+function writeCache(json){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(json)); } catch {} }
 
 /* ---------- 選單 ---------- */
 function buildNav(){
@@ -542,7 +558,7 @@ function viewGallery(){
   DATA.gallery.forEach(p => (groups[num(p['週次'])] ||= []).push(p));
   const order = Object.keys(groups).map(Number).sort((a,b) => b-a);
   const range = no => weekRange(DATA.weekly.find(w => num(w['週次'])===no) || {});
-  return corkPage({ title:'櫻桃畫廊',
+  return corkPage({ title:'櫻桃畫廊', lead:'點照片可以放大看',
     body: order.length ? order.map(no => `
       <section class="gallery-group"><h3 class="cork-label">${no ? `第 ${no} 週` : '其他'}${range(no) ? `（${esc(range(no))}）` : ''}</h3>${photoList(groups[no])}</section>`).join('')
       : '<p class="status">畫廊還沒有照片，敬請期待。</p>' });
@@ -569,11 +585,11 @@ function viewCalendar(){
   return corkPage({ title:'公佈欄', right:tabs('board','calendar'), body });
 }
 function viewNotice(type){
-  const cat = NOTICE_TYPES[type];
+  const { cat, title } = NOTICE_TYPES[type];
   const list = DATA.notices.filter(n => n['類別'] === cat);
   return corkPage({ title:'公佈欄', right:tabs('board', type), body:`
-    <div class="board"><article class="note wide">${pin()}<h3>${cat}須知</h3>
-    ${list.length ? `<ol class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong><div class="prose">${rich(n['內容'])}</div></li>`).join('')}</ol>`
+    <div class="board"><article class="note wide">${pin()}<h3>${title}</h3>
+    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong><div class="prose">${rich(n['內容'])}</div></li>`).join('')}</ul>`
                   : `<p class="empty">尚未填寫。請在試算表「須知」分頁新增類別為「${cat}」的資料。</p>`}
     </article></div>` });
 }
@@ -589,7 +605,7 @@ function route(){
     case 'board':
       parts[1] ||= 'calendar';
       html = parts[1] === 'calendar' ? viewCalendar() : viewNotice(NOTICE_TYPES[parts[1]] ? parts[1] : 'leave');
-      title = parts[1] === 'calendar' ? '行事曆' : `${NOTICE_TYPES[parts[1]]||'請假'}須知`; break;
+      title = parts[1] === 'calendar' ? '行事曆' : (NOTICE_TYPES[parts[1]] || NOTICE_TYPES.leave).title; break;
     default:        parts[0] = 'weekly'; html = viewWeekly(parts[1]); title = '每週週報';
   }
   $('#view').innerHTML = html;
@@ -701,23 +717,55 @@ const DEMO = {
     { '類別':'接送', '標題':'代接', '內容':'由非固定接送人接回時，請事先告知老師代接者姓名，接送時請出示證件。' },
     { '類別':'托藥', '標題':'填寫托藥單', '內容':'請在聯絡簿內的托藥單寫清楚：藥名、服用時間、劑量，並簽名。' },
     { '類別':'托藥', '標題':'藥品準備', '內容':'請將單次藥量分裝好，並在藥袋寫上寶貝的名字。' },
+    { '類別':'衛教', '標題':'正確洗手五步驟', '內容':'濕、搓、沖、捧、擦。飯前、如廁後、玩耍後都要洗手，搓手至少 20 秒。' },
+    { '類別':'衛教', '標題':'腸病毒流行期', '內容':'若孩子手、腳、口出現紅疹或水泡，請盡速就醫並在家休息，並告知老師。' },
     { '類別':'托藥', '標題':'親手交給老師', '內容':'藥品請親手交給老師，不要放在書包裡。' }
   ]
 };
 
-/* ---------- 啟動 ---------- */
-buildNav();
-loadAll().then(src => {
-  $('#foot').textContent = src === 'demo'
+/* ---------- 啟動 ----------
+   有上次的資料就先顯示（幾乎瞬間），同時在背景向 Apps Script 要最新資料，
+   有變動才重新畫面，家長不用每次等 Apps Script 開機。 */
+let started = false;
+function setFoot(mode){
+  $('#foot').textContent = mode === 'demo'
     ? '115櫻桃班 幼幼班（目前顯示示範資料）'
     : `115櫻桃班 幼幼班　資料更新於 ${new Date(DATA.updated || Date.now()).toLocaleString('zh-TW',{hour12:false})}`;
+}
+function start(mode){
+  started = true;
+  setFoot(mode);
   window.addEventListener('hashchange', onRoute);
   onRoute();
-}).catch(err => {
+}
+function showError(err){
   $('#view').innerHTML = `<div class="status error" role="alert"><h2 class="page-title">資料讀取失敗</h2>
     <p>${esc(err.message)}</p>
     <p>請稍後重新整理頁面；若持續出現，請老師檢查 Apps Script 的部署設定。</p></div>`;
-});
+}
+
+buildNav();
+if (!CONFIG.API_URL){
+  Object.assign(DATA, DEMO); start('demo');
+} else {
+  const cached = readCache();
+  if (cached && cached.data){ applyData(cached); start('cache'); }
+  fetchRemote().then(json => {
+    const changed = !cached || JSON.stringify(cached.data) !== JSON.stringify(json.data);
+    writeCache(json);
+    applyData(json);
+    if (!started) start('sheet');
+    else {
+      setFoot('sheet');
+      if (changed && !$('#lightbox').open){          // 有新資料才重畫，不打斷正在看大圖的人
+        const y = window.scrollY; route(); window.scrollTo(0, y);
+      }
+    }
+  }).catch(err => {
+    if (!started) showError(err);
+    else console.warn('背景更新失敗，先顯示上次的資料', err);
+  });
+}
 </script>
 </body>
 </html>
