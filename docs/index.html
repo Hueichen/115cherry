@@ -107,7 +107,7 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 }
 .board>.note:nth-child(even){rotate:.7deg}
 .board>.note:nth-child(3n){rotate:-.3deg}
-.note.wide{grid-column:1/-1;rotate:0deg}
+.note.wide,.board>.note.wide{grid-column:1/-1;rotate:0deg}
 .note.blush{background:var(--blush)}
 .note.butter{background:var(--butter)}
 .note.mint{background:var(--mint)}
@@ -122,6 +122,7 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .note h3{margin:0 0 .6rem;font-family:var(--font-hand);font-size:1.5rem;line-height:1.3}
 .note .meta{margin:-.35rem 0 .75rem;color:var(--plum-soft);font-size:.95rem}
 .prose p{margin:0 0 .8rem;max-width:40em}
+.note.wide .prose p{max-width:none}
 .prose p:last-child{margin-bottom:0}
 .lyrics{font-family:var(--font-hand);font-size:1.3rem;line-height:2;white-space:pre-line;margin:0}
 .empty{color:var(--plum-soft);margin:0}
@@ -213,6 +214,12 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
   background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2040%2040%27%3E%3Cpath%20d%3D%27M21%205C18%2012%2014%2017%2012%2023M21%205c1%207%204%2013%207%2018%27%20stroke%3D%27%234E8A3F%27%20stroke-width%3D%272.6%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M21%205c5-4%2011-3%2014%201-5%203-10%203-14-1z%27%20fill%3D%27%2379B85F%27/%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23C8283F%27/%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23E2445C%27/%3E%3Cellipse%20cx%3D%279.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3Cellipse%20cx%3D%2725.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3C/svg%3E") center/contain no-repeat;
 }
 .rules strong{display:block;font-size:1.1rem}
+.file-btn{
+  display:inline-flex;align-items:center;gap:.45rem;margin-top:.6rem;padding:.45rem 1.1rem;min-height:44px;
+  border-radius:999px;background:var(--cherry);color:#fff;text-decoration:none;font-weight:700;
+}
+.file-btn:hover{background:#A91F34}
+.file-btn svg{width:1.1em;height:1.1em;flex:none}
 
 /* 行事曆 */
 .month{margin-bottom:2.25rem}
@@ -299,7 +306,7 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
 </div>
 
 <main id="main" tabindex="-1">
-  <div id="view"><p class="status loading-dots">資料讀取中</p></div>
+  <div id="view"><p class="status" role="status">第一次載入時間會較久，請耐心等待<span class="loading-dots"></span></p></div>
 </main>
 
 <footer>
@@ -308,7 +315,7 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
 
 <dialog class="lightbox" id="lightbox" aria-label="相片檢視">
   <div class="lb-inner">
-    <img id="lb-img" alt="">
+    <img id="lb-img" alt="" referrerpolicy="no-referrer">
     <p class="lb-cap" id="lb-cap"></p>
     <p class="lb-desc" id="lb-desc"></p>
     <div class="lb-tools">
@@ -354,8 +361,9 @@ const NOTICE_TYPES = {
 /* ---------- 小工具 ---------- */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function rich(text){                       // 換行轉段落、網址轉連結
-  const safe = esc(text).replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+function rich(text){   // 換行轉段落；[文字](網址) 轉成連結；單獨的網址也會變連結
+  const safe = esc(text).replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g,
+    (m, label, url, bare) => `<a href="${url || bare}" target="_blank" rel="noopener">${label || bare}</a>`);
   return safe.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
 }
 const pin = () => `<svg class="pin" aria-hidden="true"><use href="#cherry"/></svg>`;
@@ -365,8 +373,20 @@ const num = v => parseInt(String(v).replace(/[^\d]/g,''), 10) || 0;
 function imageUrl(u){
   if (!u) return '';
   const m = u.match(/\/d\/([\w-]{20,})/) || u.match(/[?&]id=([\w-]{20,})/);
-  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1600` : u;
+  if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1600`;
+  return u.trim().replace(/^http:\/\//i, 'https://');   // 網站是 https，http 圖片會被瀏覽器擋下
 }
+// 圖片載入失敗時換成可愛的預設圖，不顯示破圖
+const FALLBACK_IMG = {
+  book:  'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120"><rect width="90" height="120" rx="4" fill="#F3ECFC"/><rect x="0" width="8" height="120" fill="#D9C9EE"/><text x="49" y="72" font-size="38" text-anchor="middle">📖</text></svg>`),
+  photo: 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#EDE5F7"/><text x="50" y="63" font-size="36" text-anchor="middle">🖼️</text></svg>`)
+};
+document.addEventListener('error', e => {
+  const img = e.target;
+  if (img.tagName !== 'IMG' || img.dataset.failed) return;
+  img.dataset.failed = '1';
+  img.src = FALLBACK_IMG[img.dataset.kind] || FALLBACK_IMG.photo;
+}, true);
 // YouTube 網址 → 影片 ID
 function youtubeId(u){
   const m = String(u).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);
@@ -493,7 +513,7 @@ function photoList(list){
   if (!list.length) return '<p class="empty">這週還沒有放上照片。</p>';
   return `<ul class="photos">${list.map(p => `<li><figure class="photo">
       <button type="button" data-photo="${DATA.gallery.indexOf(p)}" aria-label="放大觀看：${esc(p['標題'])}">
-        <img src="${esc(imageUrl(p['圖片網址']))}" alt="${esc(p['標題'])}" loading="lazy"></button>
+        <img src="${esc(imageUrl(p['圖片網址']))}" alt="${esc(p['標題'])}" loading="lazy" referrerpolicy="no-referrer" data-kind="photo"></button>
       <figcaption>${esc(p['標題'])}</figcaption></figure></li>`).join('')}</ul>`;
 }
 
@@ -527,8 +547,8 @@ function viewWeekly(weekArg){
 
 function weekBoard(w, photos, songs, rhymes, books){
   const parts = [];
-  if (w['櫻桃成長記']) parts.push(`<article class="note">${pin()}<h3>櫻桃成長記</h3><div class="prose">${rich(w['櫻桃成長記'])}</div></article>`);
-  if (w['櫻桃小須知']) parts.push(`<article class="note butter">${pin()}<h3>櫻桃小須知</h3><div class="prose">${rich(w['櫻桃小須知'])}</div></article>`);
+  if (w['櫻桃成長記']) parts.push(`<article class="note wide">${pin()}<h3>櫻桃成長記</h3><div class="prose">${rich(w['櫻桃成長記'])}</div></article>`);
+  if (w['櫻桃小須知']) parts.push(`<article class="note wide butter">${pin()}<h3>櫻桃小須知</h3><div class="prose">${rich(w['櫻桃小須知'])}</div></article>`);
   if (photos.length)   parts.push(`<article class="note wide mint">${pin()}<h3>櫻桃畫廊</h3>${photoList(photos)}</article>`);
   songs.forEach(x  => parts.push(songCard(x,'兒歌','blush')));
   rhymes.forEach(x => parts.push(songCard(x,'手指謠','')));
@@ -536,7 +556,7 @@ function weekBoard(w, photos, songs, rhymes, books){
   return parts.length ? `<div class="board">${parts.join('')}</div>` : '<p class="status">這一週的內容還在整理中。</p>';
 }
 function bookItem(b){
-  const cover = b['封面網址'] ? `<img src="${esc(imageUrl(b['封面網址']))}" alt="《${esc(b['書名'])}》封面" loading="lazy">` : '';
+  const cover = b['封面網址'] ? `<img src="${esc(imageUrl(b['封面網址']))}" alt="《${esc(b['書名'])}》封面" loading="lazy" referrerpolicy="no-referrer" data-kind="book">` : '';
   return `<li class="book">${cover}<div>
     <h4>《${esc(b['書名'])}》</h4>${b['作者'] ? `<p class="by">${esc(b['作者'])}</p>` : ''}
     ${b['介紹'] ? `<div class="prose">${rich(b['介紹'])}</div>` : ''}</div></li>`;
@@ -584,12 +604,20 @@ function viewCalendar(){
     (hasHidden ? `<p class="cork-more"><button class="text-btn" type="button" id="show-past">顯示先前的活動</button></p>` : '');
   return corkPage({ title:'公佈欄', right:tabs('board','calendar'), body });
 }
+function fileButton(n){
+  const url = (n['附件網址'] || '').trim();
+  if (!/^https?:\/\//i.test(url)) return '';
+  const name = n['附件名稱'] || '附件';
+  return `<a class="file-btn" href="${esc(url)}" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    下載：${esc(name)}<span class="visually-hidden">（另開新視窗）</span></a>`;
+}
 function viewNotice(type){
   const { cat, title } = NOTICE_TYPES[type];
   const list = DATA.notices.filter(n => n['類別'] === cat);
   return corkPage({ title:'公佈欄', right:tabs('board', type), body:`
     <div class="board"><article class="note wide">${pin()}<h3>${title}</h3>
-    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong><div class="prose">${rich(n['內容'])}</div></li>`).join('')}</ul>`
+    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong>${n['內容'] ? `<div class="prose">${rich(n['內容'])}</div>` : ''}${fileButton(n)}</li>`).join('')}</ul>`
                   : `<p class="empty">尚未填寫。請在試算表「須知」分頁新增類別為「${cat}」的資料。</p>`}
     </article></div>` });
 }
@@ -651,7 +679,7 @@ function openLightbox(i, from){
 }
 function showLb(){
   const p = lbList[lbPos];
-  $('#lb-img').src = imageUrl(p['圖片網址']); $('#lb-img').alt = p['標題'];
+  delete $('#lb-img').dataset.failed; $('#lb-img').src = imageUrl(p['圖片網址']); $('#lb-img').alt = p['標題'];
   $('#lb-cap').textContent = p['標題'];
   $('#lb-desc').textContent = [p['日期'], p['說明']].filter(Boolean).join('　');
   $('#lb-prev').disabled = lbPos === 0; $('#lb-next').disabled = lbPos === lbList.length - 1;
@@ -719,6 +747,7 @@ const DEMO = {
     { '類別':'托藥', '標題':'藥品準備', '內容':'請將單次藥量分裝好，並在藥袋寫上寶貝的名字。' },
     { '類別':'衛教', '標題':'正確洗手五步驟', '內容':'濕、搓、沖、捧、擦。飯前、如廁後、玩耍後都要洗手，搓手至少 20 秒。' },
     { '類別':'衛教', '標題':'腸病毒流行期', '內容':'若孩子手、腳、口出現紅疹或水泡，請盡速就醫並在家休息，並告知老師。' },
+    { '類別':'托藥', '標題':'托藥委託單', '內容':'第一次托藥前，請先下載填寫，交給老師。', '附件名稱':'托藥委託單', '附件網址':'https://example.com/' },
     { '類別':'托藥', '標題':'親手交給老師', '內容':'藥品請親手交給老師，不要放在書包裡。' }
   ]
 };
@@ -739,9 +768,9 @@ function start(mode){
   onRoute();
 }
 function showError(err){
+  console.warn('資料讀取失敗：', err);   // 技術細節留在瀏覽器主控台，方便老師排查
   $('#view').innerHTML = `<div class="status error" role="alert"><h2 class="page-title">資料讀取失敗</h2>
-    <p>${esc(err.message)}</p>
-    <p>請稍後重新整理頁面；若持續出現，請老師檢查 Apps Script 的部署設定。</p></div>`;
+    <p>請洽 <a href="mailto:f050359@gmail.com">f050359@gmail.com</a></p></div>`;
 }
 
 buildNav();
