@@ -265,6 +265,16 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
   .nav-btn{padding:.45rem .8rem}
 }
 @media (max-width:520px){
+  /* 佈告欄分頁籤：一排三個的小方塊，最多兩排 */
+  .cork-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
+  .cork-tabs a{display:block;text-align:center;padding:.3rem .2rem;font-size:.92rem;min-height:38px;line-height:1.6;white-space:nowrap}
+  .cork-title{font-size:1.7rem}
+  .cork-head{row-gap:.5rem}
+  /* 便條與須知：文字往左靠，櫻桃符號只跟著標題 */
+  .note{padding:2rem 1.1rem 1.25rem}
+  .rules li{padding-left:0}
+  .rules li::before{width:1.6rem;height:1.6rem;top:.05rem}
+  .rules strong{padding-left:2.1rem;min-height:1.7rem}
   .nav{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;max-width:22rem}
   .nav-btn{width:100%;justify-content:center;padding:.45rem .5rem}
   .sub{left:0;right:0;translate:none;min-width:0}
