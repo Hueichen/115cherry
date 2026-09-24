@@ -36,7 +36,7 @@
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{
-  margin:0;min-height:100%;
+  margin:0;min-height:100%;overflow-x:hidden;overflow-x:clip;
   font-family:var(--font-body);font-size:1.0625rem;line-height:1.75;color:var(--plum);
   background-color:var(--bg);
   background-image:radial-gradient(var(--bg-dot) 1.6px,transparent 1.7px);
@@ -72,7 +72,9 @@ a{color:var(--cherry)}
 .nav-btn[aria-current="page"],.nav-btn.is-active{background:var(--cherry);color:#fff}
 .caret{width:.7em;height:.7em;transition:transform .15s}
 .nav-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
+
 .sub{
+  z-index:30;
   position:absolute;top:calc(100% + .4rem);left:50%;translate:-50% 0;min-width:10.5rem;
   list-style:none;margin:0;padding:.4rem;background:var(--paper);
   border-radius:14px;box-shadow:var(--shadow);border:2px dashed #E7DBF3;
@@ -100,7 +102,7 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 
 /* ============ 便條紙（公告欄的主角） ============ */
 .board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5rem 1.75rem;align-items:start}
-@media (max-width:720px){.board{grid-template-columns:1fr}}
+@media (max-width:720px){.board{grid-template-columns:minmax(0,1fr)}}
 .note{
   position:relative;background:var(--paper);padding:2.1rem 1.5rem 1.5rem;border-radius:4px;
   box-shadow:var(--shadow);rotate:-.6deg;
@@ -112,7 +114,7 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .note.butter{background:var(--butter)}
 .note.mint{background:var(--mint)}
 .note.lilac{background:#F3ECFC}
-.books{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.books{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:1.5rem}
 .book{display:flex;gap:1rem;align-items:flex-start}
 .book img{flex:none;width:96px;aspect-ratio:3/4;object-fit:cover;border-radius:2px 6px 6px 2px;background:#fff;box-shadow:-3px 0 0 #D9C9EE inset,0 4px 10px -4px rgba(67,52,90,.35)}
 .book h4{margin:0;font-family:var(--font-hand);font-size:1.3rem;line-height:1.35}
@@ -146,7 +148,8 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .week-range{font-size:1.1rem;font-weight:700}
 .week-nav{margin-left:auto;display:flex;align-items:center;gap:.5rem;min-width:0;max-width:100%}
 .week-nav nav{min-width:0}
-.week-dots{display:flex;gap:.4rem;list-style:none;margin:0;padding:.3rem;overflow-x:auto;scrollbar-width:thin}
+.week-dots{position:relative;display:flex;gap:.4rem;list-style:none;margin:0;padding:.3rem;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.week-dots::-webkit-scrollbar{display:none}
 .week-dots a{
   display:grid;place-items:center;width:38px;height:38px;border-radius:50%;flex:none;
   border:2px solid rgba(255,246,230,.55);color:var(--cream);text-decoration:none;font-weight:700;font-size:.95rem;
@@ -214,6 +217,9 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
   background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2040%2040%27%3E%3Cpath%20d%3D%27M21%205C18%2012%2014%2017%2012%2023M21%205c1%207%204%2013%207%2018%27%20stroke%3D%27%234E8A3F%27%20stroke-width%3D%272.6%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M21%205c5-4%2011-3%2014%201-5%203-10%203-14-1z%27%20fill%3D%27%2379B85F%27/%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23C8283F%27/%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23E2445C%27/%3E%3Cellipse%20cx%3D%279.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3Cellipse%20cx%3D%2725.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3C/svg%3E") center/contain no-repeat;
 }
 .rules strong{display:block;font-size:1.1rem}
+.notice-imgs{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.7rem}
+.notice-imgs a{display:block;max-width:100%}
+.notice-imgs img{max-width:min(100%,640px);max-height:560px;width:auto;border-radius:8px;box-shadow:var(--shadow);background:#fff}
 .file-btn{
   display:inline-flex;align-items:center;gap:.45rem;margin-top:.6rem;padding:.45rem 1.1rem;min-height:44px;
   border-radius:999px;background:var(--cherry);color:#fff;text-decoration:none;font-weight:700;
@@ -257,6 +263,13 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
   .masthead{border-radius:0 0 20px 20px}
   .logo{width:48px;height:48px}
   .nav-btn{padding:.45rem .8rem}
+}
+@media (max-width:520px){
+  .nav{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;max-width:22rem}
+  .nav-btn{width:100%;justify-content:center;padding:.45rem .5rem}
+  .sub{left:0;right:0;translate:none;min-width:0}
+}
+@media (max-width:640px){
   .corkboard{--frame:8px;border-radius:16px;padding:0 1rem 1.75rem}
   .cork-head{margin:0 calc(-1rem - 1px) 2.5rem;padding:.25rem 1rem .9rem}
   .week-nav{margin-left:0;width:100%}
@@ -604,6 +617,13 @@ function viewCalendar(){
     (hasHidden ? `<p class="cork-more"><button class="text-btn" type="button" id="show-past">顯示先前的活動</button></p>` : '');
   return corkPage({ title:'公佈欄', right:tabs('board','calendar'), body });
 }
+function noticeImages(n){
+  // 「圖片網址」可放多張，一行一個網址
+  const urls = String(n['圖片網址'] || '').split(/\s+/).filter(u => /^https?:\/\//i.test(u));
+  if (!urls.length) return '';
+  return `<div class="notice-imgs">${urls.map((u, i) => { const src = esc(imageUrl(u));
+    return `<a href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="${esc(n['標題'])}說明圖${urls.length > 1 ? `（${i+1}）` : ''}" loading="lazy" referrerpolicy="no-referrer" data-kind="photo"><span class="visually-hidden">（點圖另開新視窗放大）</span></a>`; }).join('')}</div>`;
+}
 function fileButton(n){
   const url = (n['附件網址'] || '').trim();
   if (!/^https?:\/\//i.test(url)) return '';
@@ -617,7 +637,7 @@ function viewNotice(type){
   const list = DATA.notices.filter(n => n['類別'] === cat);
   return corkPage({ title:'公佈欄', right:tabs('board', type), body:`
     <div class="board"><article class="note wide">${pin()}<h3>${title}</h3>
-    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong>${n['內容'] ? `<div class="prose">${rich(n['內容'])}</div>` : ''}${fileButton(n)}</li>`).join('')}</ul>`
+    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong>${n['內容'] ? `<div class="prose">${rich(n['內容'])}</div>` : ''}${noticeImages(n)}${fileButton(n)}</li>`).join('')}</ul>`
                   : `<p class="empty">尚未填寫。請在試算表「須知」分頁新增類別為「${cat}」的資料。</p>`}
     </article></div>` });
 }
@@ -638,7 +658,7 @@ function route(){
   }
   $('#view').innerHTML = html;
   const cur = document.querySelector('.week-dots [aria-current]');
-  if (cur) cur.scrollIntoView({block:'nearest', inline:'center'});
+  if (cur){ const box = cur.parentElement.parentElement; box.scrollLeft = cur.offsetLeft - (box.clientWidth - cur.offsetWidth) / 2; }
   document.title = `${title}｜115櫻桃班 親師公告欄`;
   markNav(parts);
   return parts;
