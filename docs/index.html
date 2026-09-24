@@ -542,10 +542,10 @@ function viewGallery(){
   DATA.gallery.forEach(p => (groups[num(p['週次'])] ||= []).push(p));
   const order = Object.keys(groups).map(Number).sort((a,b) => b-a);
   const range = no => weekRange(DATA.weekly.find(w => num(w['週次'])===no) || {});
-  return corkPage({ title:'櫻桃畫廊', lead:'點照片可以放大看',
+  return corkPage({ title:'櫻桃畫廊',
     body: order.length ? order.map(no => `
       <section class="gallery-group"><h3 class="cork-label">${no ? `第 ${no} 週` : '其他'}${range(no) ? `（${esc(range(no))}）` : ''}</h3>${photoList(groups[no])}</section>`).join('')
-      : '<p class="status">畫廊還沒有照片，請在試算表「畫廊」分頁新增。</p>' });
+      : '<p class="status">畫廊還沒有照片，敬請期待。</p>' });
 }
 
 /* ---------- 頁面：公佈欄 ---------- */
