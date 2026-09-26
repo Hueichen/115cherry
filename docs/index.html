@@ -417,19 +417,21 @@ const MENU = [
       { id:'songs',  label:'兒歌',   href:'#/sing/songs' },
       { id:'rhymes', label:'手指謠', href:'#/sing/rhymes' } ] },
   ...(CONFIG.SHOW_GALLERY ? [{ id:'gallery', label:'櫻桃畫廊', href:'#/gallery' }] : []),
-  { id:'board',   label:'公佈欄', children:[
+  { id:'board',   label:'佈告欄', children:[
       { id:'calendar', label:'行事曆',   href:'#/board/calendar' },
       { id:'leave',    label:'請假須知', href:'#/board/leave' },
       { id:'pickup',   label:'接送須知', href:'#/board/pickup' },
       { id:'medicine', label:'托藥須知', href:'#/board/medicine' },
-      { id:'health',   label:'衛教宣導', href:'#/board/health' } ] }
+      { id:'health',   label:'衛教宣導', href:'#/board/health' },
+      { id:'menu',     label:'每月菜單', href:'#/board/menu' } ] }
 ];
 // 網址代號 → 試算表「須知」分頁的「類別」、頁面標題
 const NOTICE_TYPES = {
   leave:    { cat:'請假', title:'請假須知' },
   pickup:   { cat:'接送', title:'接送須知' },
   medicine: { cat:'托藥', title:'托藥須知' },
-  health:   { cat:'衛教', title:'衛教宣導' }
+  health:   { cat:'衛教', title:'衛教宣導' },
+  menu:     { cat:'菜單', title:'每月菜單', newestFirst:true, verb:'打開', empty:'菜單尚未上傳，敬請期待。' }
 };
 
 /* ---------- 小工具 ---------- */
@@ -543,6 +545,22 @@ function buildNav(){
   });
   $('#nav').addEventListener('click', e => { if (e.target.closest('.sub a')) closeAll(); });
 }
+function latestMenuUrl(){
+  const list = (DATA.notices || []).filter(n => n['類別'] === '菜單' && /^https?:\/\//i.test(n['附件網址'] || ''));
+  return list.length ? list[list.length - 1]['附件網址'].trim() : '';
+}
+function refreshMenuLinks(){
+  const url = latestMenuUrl();
+  document.querySelectorAll('a[data-id="menu"]').forEach(a => {
+    a.querySelector('.visually-hidden')?.remove();
+    if (url){
+      a.href = url; a.target = '_blank'; a.rel = 'noopener';
+      a.insertAdjacentHTML('beforeend', '<span class="visually-hidden">（PDF，另開新視窗）</span>');
+    } else {
+      a.href = '#/board/menu'; a.removeAttribute('target');
+    }
+  });
+}
 function markNav(parts){
   document.querySelectorAll('.nav [aria-current]').forEach(el => el.removeAttribute('aria-current'));
   document.querySelectorAll('.nav .is-active').forEach(el => el.classList.remove('is-active'));
@@ -558,7 +576,7 @@ function markNav(parts){
 function tabs(groupId, current){
   const g = MENU.find(m => m.id === groupId);
   return `<ul class="cork-tabs" aria-label="${g.label}分類">${g.children.map(c =>
-    `<li><a href="${c.href}" ${c.id===current?'aria-current="page"':''}>${c.label}</a></li>`).join('')}</ul>`;
+    `<li><a href="${c.href}" data-id="${c.id}" ${c.id===current?'aria-current="page"':''}>${c.label}</a></li>`).join('')}</ul>`;
 }
 function corkPage({title, lead='', right='', body}){
   return `<section class="corkboard" aria-labelledby="page-title">
@@ -659,7 +677,7 @@ function viewGallery(){
       : '<p class="status">畫廊還沒有照片，敬請期待。</p>' });
 }
 
-/* ---------- 頁面：公佈欄 ---------- */
+/* ---------- 頁面：佈告欄 ---------- */
 /* 月曆狀態：目前顯示的月份、選取的日期 */
 const dayKey = d => `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
 const TODAY = (() => { const t = new Date(); t.setHours(0,0,0,0); return t; })();
@@ -716,7 +734,7 @@ function viewCalendar(){
       : '<p class="empty">這一天沒有活動。</p>'}
   </section>`;
 
-  return corkPage({ title:'公佈欄', right:tabs('board','calendar'), body:`
+  return corkPage({ title:'佈告欄', right:tabs('board','calendar'), body:`
     <div class="cal">${pin()}
       <div class="cal-top">
         <h3 class="cal-month" aria-live="polite">${y} 年 ${m+1} 月</h3>
@@ -745,21 +763,22 @@ function noticeImages(n){
   return `<div class="notice-imgs">${urls.map((u, i) => { const src = esc(imageUrl(u));
     return `<a href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="${esc(n['標題'])}說明圖${urls.length > 1 ? `（${i+1}）` : ''}" loading="lazy" referrerpolicy="no-referrer" data-kind="photo"><span class="visually-hidden">（點圖另開新視窗放大）</span></a>`; }).join('')}</div>`;
 }
-function fileButton(n){
+function fileButton(n, verb = '下載'){
   const url = (n['附件網址'] || '').trim();
   if (!/^https?:\/\//i.test(url)) return '';
-  const name = n['附件名稱'] || '附件';
+  const name = n['附件名稱'] || n['標題'] || '附件';
   return `<a class="file-btn" href="${esc(url)}" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    下載：${esc(name)}<span class="visually-hidden">（另開新視窗）</span></a>`;
+    ${verb}：${esc(name)}<span class="visually-hidden">（另開新視窗）</span></a>`;
 }
 function viewNotice(type){
-  const { cat, title } = NOTICE_TYPES[type];
-  const list = DATA.notices.filter(n => n['類別'] === cat);
-  return corkPage({ title:'公佈欄', right:tabs('board', type), body:`
+  const { cat, title, newestFirst, verb, empty } = NOTICE_TYPES[type];
+  let list = DATA.notices.filter(n => n['類別'] === cat);
+  if (newestFirst) list = list.slice().reverse();
+  return corkPage({ title:'佈告欄', right:tabs('board', type), body:`
     <div class="board"><article class="note wide">${pin()}<h3>${title}</h3>
-    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong>${n['內容'] ? `<div class="prose">${rich(n['內容'])}</div>` : ''}${noticeImages(n)}${fileButton(n)}</li>`).join('')}</ul>`
-                  : `<p class="empty">尚未填寫。請在試算表「須知」分頁新增類別為「${cat}」的資料。</p>`}
+    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong>${n['內容'] ? `<div class="prose">${rich(n['內容'])}</div>` : ''}${noticeImages(n)}${fileButton(n, verb)}</li>`).join('')}</ul>`
+                  : `<p class="empty">${empty || `尚未填寫。請在試算表「須知」分頁新增類別為「${cat}」的資料。`}</p>`}
     </article></div>` });
 }
 
@@ -783,6 +802,7 @@ function route(){
   if (cur){ const box = cur.parentElement.parentElement; box.scrollLeft = cur.offsetLeft - (box.clientWidth - cur.offsetWidth) / 2; }
   document.title = `${title}｜115櫻桃班 親師公告欄`;
   markNav(parts);
+  refreshMenuLinks();
   return parts;
 }
 let firstRoute = true;
@@ -904,6 +924,8 @@ const DEMO = {
     { '類別':'衛教', '標題':'正確洗手五步驟', '內容':'濕、搓、沖、捧、擦。飯前、如廁後、玩耍後都要洗手，搓手至少 20 秒。' },
     { '類別':'衛教', '標題':'腸病毒流行期', '內容':'若孩子手、腳、口出現紅疹或水泡，請盡速就醫並在家休息，並告知老師。' },
     { '類別':'托藥', '標題':'托藥委託單', '內容':'第一次托藥前，請先下載填寫，交給老師。', '附件名稱':'托藥委託單', '附件網址':'https://example.com/' },
+    { '類別':'菜單', '標題':'9 月菜單', '內容':'', '附件名稱':'9 月菜單', '附件網址':'https://example.com/menu-09.pdf' },
+    { '類別':'菜單', '標題':'10 月菜單', '內容':'', '附件名稱':'10 月菜單', '附件網址':'https://example.com/menu-10.pdf' },
     { '類別':'托藥', '標題':'親手交給老師', '內容':'藥品請親手交給老師，不要放在書包裡。' }
   ]
 };
@@ -942,6 +964,7 @@ if (!CONFIG.API_URL){
     if (!started) start('sheet');
     else {
       setFoot('sheet');
+      refreshMenuLinks();
       if (changed && !$('#lightbox').open){          // 有新資料才重畫，不打斷正在看大圖的人
         const y = window.scrollY; route(); window.scrollTo(0, y);
       }
