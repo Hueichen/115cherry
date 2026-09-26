@@ -1,3 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- 請搜尋引擎不要收錄這個網站，也不要保存頁面快取 -->
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<title>115櫻桃班 親師公告欄</title>
+<meta name="description" content="幼幼班櫻桃班的每週週報、兒歌手指謠、班級畫廊與各項須知">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍒</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;600;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ 色彩與字型 ============ */
+:root{
+  --bg:#EDE5F7;          /* 淺紫底色 */
+  --bg-dot:#E2D6F1;      /* 底紋圓點 */
+  --paper:#FFFDF7;       /* 便條紙 */
+  --blush:#FDE6EA;       /* 粉紅便條 */
+  --butter:#FFF4CC;      /* 奶油黃便條 */
+  --mint:#E4F2DC;        /* 薄荷綠便條 */
+  --cherry:#C8283F;      /* 櫻桃紅（文字用，對比足夠） */
+  --cherry-bright:#E2445C;
+  --leaf:#4E8A3F;
+  --plum:#43345A;        /* 主要文字 */
+  --plum-soft:#6C5C85;   /* 次要文字 */
+  --lilac:#8E74BE;       /* 點綴紫 */
+  --ribbon:#FFFFFF;
+  --shadow:0 1px 0 rgba(67,52,90,.06), 0 8px 18px -8px rgba(67,52,90,.28);
+  --font-body:"Chiron GoRound TC","PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;
+  --font-hand:"LXGW WenKai TC","Kaiti TC","DFKai-SB","BiauKai",serif;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{
+  margin:0;min-height:100%;overflow-x:hidden;overflow-x:clip;
+  font-family:var(--font-body);font-size:1.0625rem;line-height:1.75;color:var(--plum);
+  background-color:var(--bg);
+  background-image:radial-gradient(var(--bg-dot) 1.6px,transparent 1.7px);
+  background-size:22px 22px;
+}
+img{max-width:100%;display:block}
+a{color:var(--cherry)}
+:focus-visible{outline:3px solid var(--lilac);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:0;background:var(--plum);color:#fff;padding:.5rem 1rem;z-index:100}
+.skip:focus{left:1rem;top:1rem}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ============ 頁首 ============ */
+.masthead{background:var(--paper);border-radius:0 0 28px 28px;box-shadow:var(--shadow);max-width:1120px;margin:0 auto;position:relative;z-index:20}
+.site-head{padding:1.25rem 1.25rem .5rem;display:flex;align-items:center;justify-content:center;gap:.85rem;text-align:center}
+.logo{width:60px;height:60px;flex:none}
+.site-title{margin:0;font-family:var(--font-hand);font-weight:700;font-size:clamp(2rem,5vw,2.7rem);line-height:1.1;letter-spacing:.08em;color:var(--plum)}
+
+/* ============ 主選單 ============ */
+.nav-wrap{padding:0 1rem .9rem}
+.nav{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;list-style:none;margin:0 auto;padding:.7rem 0 0;
+  max-width:44rem;border-top:2px dashed #E7DBF3;
+}
+.nav>li{position:relative}
+.nav-btn{
+  display:flex;align-items:center;gap:.35rem;border:0;background:none;cursor:pointer;
+  font:inherit;font-weight:600;color:var(--plum);text-decoration:none;
+  padding:.5rem 1.05rem;border-radius:999px;min-height:44px;
+}
+.nav-btn:hover{background:var(--blush)}
+.nav-btn[aria-current="page"],.nav-btn.is-active{background:var(--cherry);color:#fff}
+.caret{width:.7em;height:.7em;transition:transform .15s}
+.nav-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
+
+.sub{
+  z-index:30;
+  position:absolute;top:calc(100% + .4rem);left:50%;translate:-50% 0;min-width:10.5rem;
+  list-style:none;margin:0;padding:.4rem;background:var(--paper);
+  border-radius:14px;box-shadow:var(--shadow);border:2px dashed #E7DBF3;
+}
+.sub[hidden]{display:none}
+.sub a{display:block;padding:.45rem .8rem;border-radius:10px;text-decoration:none;color:var(--plum);font-weight:600}
+.sub a:hover{background:var(--blush)}
+.sub a[aria-current="page"]{color:var(--cherry);background:var(--blush)}
+
+/* ============ 主要內容 ============ */
+main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.75rem}
+.page-title{margin:0;font-family:var(--font-hand);font-weight:700;font-size:clamp(1.8rem,4.5vw,2.4rem);line-height:1.2}
+.page-title:focus{outline:none}
+.page-lead{margin:.25rem 0 0;color:var(--plum-soft)}
+
+/* 分頁籤（次選單在頁面內的版本） */
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.75rem;padding:0;list-style:none}
+.tabs a{
+  display:inline-block;padding:.4rem 1rem;border-radius:999px;text-decoration:none;font-weight:600;
+  color:var(--plum);background:rgba(255,255,255,.7);border:2px solid transparent;
+}
+.tabs a:hover{border-color:var(--cherry-bright)}
+.tabs a[aria-current="page"]{background:var(--paper);border-color:var(--cherry);color:var(--cherry)}
+
+/* ============ 便條紙（公告欄的主角） ============ */
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5rem 1.75rem;align-items:start}
+@media (max-width:720px){.board{grid-template-columns:minmax(0,1fr)}}
+.note{
+  position:relative;background:var(--paper);padding:2.1rem 1.5rem 1.5rem;border-radius:4px;
+  box-shadow:var(--shadow);rotate:-.6deg;
+}
+.board>.note:nth-child(even){rotate:.7deg}
+.board>.note:nth-child(3n){rotate:-.3deg}
+.note.wide,.board>.note.wide{grid-column:1/-1;rotate:0deg}
+.note.blush{background:var(--blush)}
+.note.butter{background:var(--butter)}
+.note.mint{background:var(--mint)}
+.note.lilac{background:#F3ECFC}
+.books{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:1.5rem}
+.book{display:flex;gap:1rem;align-items:flex-start}
+.book img{flex:none;width:96px;aspect-ratio:3/4;object-fit:cover;border-radius:2px 6px 6px 2px;background:#fff;box-shadow:-3px 0 0 #D9C9EE inset,0 4px 10px -4px rgba(67,52,90,.35)}
+.book h4{margin:0;font-family:var(--font-hand);font-size:1.3rem;line-height:1.35}
+.book .by{margin:.1rem 0 .4rem;color:var(--plum-soft);font-size:.95rem}
+.book .prose p{font-size:1rem}
+.pin{position:absolute;top:-20px;left:50%;translate:-50% 0;width:40px;height:40px;filter:drop-shadow(0 2px 1px rgba(67,52,90,.25))}
+.note h3{margin:0 0 .6rem;font-family:var(--font-hand);font-size:1.5rem;line-height:1.3}
+.note .meta{margin:-.35rem 0 .75rem;color:var(--plum-soft);font-size:.95rem}
+.prose p{margin:0 0 .8rem;max-width:40em}
+.note.wide .prose p{max-width:none}
+.prose p:last-child{margin-bottom:0}
+.lyrics{font-family:var(--font-hand);font-size:1.3rem;line-height:2;white-space:pre-line;margin:0}
+.empty{color:var(--plum-soft);margin:0}
+
+/* ============ 佈告欄（每週週報） ============ */
+.corkboard{
+  --wood:#8A5C35; --cream:#FFF6E6; --frame:14px;
+  border:var(--frame) solid var(--wood);border-radius:24px;
+  background:
+    radial-gradient(rgba(140,95,50,.20) 1px,transparent 1.6px) 0 0/9px 9px,
+    radial-gradient(rgba(255,255,255,.35) 1px,transparent 1.6px) 4px 5px/13px 13px,
+    #E8CFA8;
+  box-shadow:inset 0 3px 8px rgba(70,40,15,.25),0 14px 30px -14px rgba(67,52,90,.45);
+  padding:0 1.75rem 2.25rem;
+}
+.cork-head{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.25rem;
+  background:var(--wood);color:var(--cream);margin:0 calc(-1.75rem - 1px) 2.75rem;padding:.25rem 1.5rem 1rem;
+}
+.week-no{margin:0;font-family:var(--font-hand);font-size:2rem;font-weight:700;line-height:1.1;letter-spacing:.05em}
+.week-range{font-size:1.1rem;font-weight:700}
+.week-nav{margin-left:auto;display:flex;align-items:center;gap:.5rem;min-width:0;max-width:100%}
+.week-nav nav{min-width:0}
+.week-dots{position:relative;display:flex;gap:.4rem;list-style:none;margin:0;padding:.3rem;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.week-dots::-webkit-scrollbar{display:none}
+.week-dots a{
+  display:grid;place-items:center;width:38px;height:38px;border-radius:50%;flex:none;
+  border:2px solid rgba(255,246,230,.55);color:var(--cream);text-decoration:none;font-weight:700;font-size:.95rem;
+}
+.week-dots a:hover{background:rgba(255,246,230,.18)}
+.week-dots a[aria-current="page"]{background:var(--cream);border-color:var(--cream);color:var(--wood)}
+.cork-head .round-btn{background:transparent;border-color:rgba(255,246,230,.8);color:var(--cream)}
+.cork-head .round-btn:hover:not(:disabled){background:rgba(255,246,230,.18)}
+.cork-head :focus-visible{outline-color:var(--cream)}
+.corkboard .status{margin:0 auto}
+.cork-title{margin:0;font-family:var(--font-hand);font-size:2rem;font-weight:700;line-height:1.1;letter-spacing:.05em;color:var(--cream)}
+.cork-title:focus{outline:none}
+.cork-lead{font-size:1rem;opacity:.9}
+.cork-tabs{margin-left:auto;display:flex;flex-wrap:wrap;gap:.45rem;list-style:none;margin-block:0;padding:.3rem 0 0}
+.cork-tabs a{
+  display:inline-block;padding:.35rem 1rem;border-radius:999px;text-decoration:none;font-weight:700;
+  color:var(--cream);border:2px solid rgba(255,246,230,.55);min-height:40px;
+}
+.cork-tabs a:hover{background:rgba(255,246,230,.18)}
+.cork-tabs a[aria-current="page"]{background:var(--cream);border-color:var(--cream);color:var(--wood)}
+.cork-label{
+  display:inline-block;margin:0 0 1.1rem;background:var(--paper);padding:.3rem 1.1rem;border-radius:3px;
+  font-family:var(--font-hand);font-size:1.35rem;box-shadow:var(--shadow);rotate:-1.2deg;
+}
+.corkboard .gallery-group{margin-bottom:2.25rem}
+.corkboard .gallery-group:last-child{margin-bottom:0}
+.corkboard .events{gap:0}
+.corkboard .event{box-shadow:none;background:none;border-radius:10px;padding:.75rem .5rem;border-bottom:2px dashed #EADFF3}
+.corkboard .event:last-child{border-bottom:0}
+.corkboard .event.next{outline:0;background:var(--blush)}
+.cork-more{text-align:center;margin-top:2rem}
+
+/* ============ 月曆（仿 Google 日曆） ============ */
+.cal{position:relative;background:var(--paper);border-radius:6px;box-shadow:var(--shadow);padding:2rem 1.25rem 1.4rem}
+.cal-top{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem}
+.cal-month{margin:0 auto 0 0;font-family:var(--font-hand);font-size:1.7rem;line-height:1.2}
+.cal-top .round-btn{width:40px;height:40px}
+.cal-grid abbr{text-decoration:none;border:0}
+.today-btn{white-space:nowrap;flex:none;border:2px solid var(--lilac);background:#fff;color:var(--plum);font:inherit;font-weight:700;border-radius:999px;padding:.3rem 1rem;min-height:40px;cursor:pointer}
+.today-btn:hover{background:var(--blush)}
+.cal-grid{width:100%;border-collapse:collapse;table-layout:fixed}
+.cal-grid th{font-size:.85rem;font-weight:700;color:var(--plum-soft);padding:.25rem 0 .45rem}
+.cal-grid th.we{color:var(--cherry)}
+.cal-grid td{border:1px solid #EEE5F6;padding:0;height:6.4rem;vertical-align:top}
+.cal-day{
+  all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;
+  width:100%;height:100%;padding:.3rem .25rem;cursor:pointer;
+}
+.cal-day:hover{background:#FBF7FE}
+.cal-day:focus-visible{outline:3px solid var(--lilac);outline-offset:-3px}
+.cal-day[aria-pressed="true"]{background:#F3ECFC}
+.day-num{display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:50%;font-weight:700;font-size:.95rem;flex:none}
+.cal-day.we .day-num{color:var(--cherry)}
+.cal-day.today .day-num{background:var(--cherry);color:#fff}
+.cal-day.other{opacity:.4}
+.chips{display:flex;flex-direction:column;gap:2px;width:100%;margin-top:.2rem;min-width:0}
+.chip{display:block;font-size:.78rem;line-height:1.4;padding:1px 6px;border-radius:4px;background:#6C52A0;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip.holiday,.dot.holiday,.ag-bar.holiday{background:var(--cherry)}
+.more{font-size:.75rem;color:var(--plum-soft);padding-left:6px}
+.dots{display:none;gap:3px;margin-top:.25rem}
+.dot{width:6px;height:6px;border-radius:50%;background:#6C52A0}
+.agenda{margin-top:1.25rem;padding-top:1rem;border-top:2px dashed #EADFF3}
+.agenda h4{margin:0 0 .7rem;font-family:var(--font-hand);font-size:1.35rem}
+.ag-list{list-style:none;margin:0;padding:0;display:grid;gap:.7rem}
+.ag-item{display:flex;gap:.75rem;align-items:stretch}
+.ag-bar{flex:none;width:6px;border-radius:3px;background:#6C52A0}
+.ag-item b{display:block;font-size:1.08rem}
+.ag-item span{display:block;color:var(--plum-soft);font-size:.95rem}
+.cal-legend{display:flex;gap:1rem;margin-top:1rem;font-size:.85rem;color:var(--plum-soft);flex-wrap:wrap}
+.cal-legend i{display:inline-block;width:.8rem;height:.8rem;border-radius:3px;background:#6C52A0;margin-right:.35rem;vertical-align:-.05em}
+.cal-legend i.holiday{background:var(--cherry)}
+.cork-more .text-btn{background:var(--paper);padding:.55rem 1.3rem;border-radius:999px;text-decoration:none;box-shadow:var(--shadow);min-height:44px}
+.round-btn{
+  width:44px;height:44px;border-radius:50%;border:2px solid var(--lilac);background:#fff;color:var(--plum);
+  font:inherit;font-size:1.2rem;cursor:pointer;display:grid;place-items:center;
+}
+.round-btn:hover:not(:disabled){background:var(--blush)}
+.round-btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* 相片 */
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1.25rem;list-style:none;margin:0;padding:0}
+.photo{margin:0;background:#fff;padding:.5rem .5rem .6rem;box-shadow:var(--shadow);border-radius:3px;rotate:-1.2deg}
+.photos li:nth-child(even) .photo{rotate:1.4deg}
+.photo button{all:unset;cursor:zoom-in;display:block;width:100%}
+.photo button:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
+.photo img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--bg)}
+.photo figcaption{font-family:var(--font-hand);font-size:1rem;text-align:center;margin-top:.35rem;line-height:1.4}
+.gallery-group{margin-bottom:2.5rem}
+.gallery-group h3{font-family:var(--font-hand);font-size:1.4rem;margin:0 0 1rem}
+
+/* 影片 */
+.video-btn{
+  margin-top:1rem;display:inline-flex;align-items:center;gap:.45rem;border:0;cursor:pointer;
+  background:var(--cherry);color:#fff;font:inherit;font-weight:600;padding:.5rem 1.1rem;border-radius:999px;min-height:44px;
+}
+.video-btn:hover{background:#A91F34}
+.video{margin-top:1rem;aspect-ratio:16/9;width:100%;border:0;border-radius:10px;background:#000}
+
+/* 須知 */
+.rules{margin:0;padding:0;list-style:none}
+.rules li{position:relative;padding:0 0 1.1rem 2.6rem}
+.rules .prose p{max-width:none}
+.rules li::before{
+  content:"";position:absolute;left:0;top:.05rem;width:1.9rem;height:1.9rem;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2040%2040%27%3E%3Cpath%20d%3D%27M21%205C18%2012%2014%2017%2012%2023M21%205c1%207%204%2013%207%2018%27%20stroke%3D%27%234E8A3F%27%20stroke-width%3D%272.6%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M21%205c5-4%2011-3%2014%201-5%203-10%203-14-1z%27%20fill%3D%27%2379B85F%27/%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23C8283F%27/%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%2728%27%20r%3D%278%27%20fill%3D%27%23E2445C%27/%3E%3Cellipse%20cx%3D%279.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3Cellipse%20cx%3D%2725.3%27%20cy%3D%2725.2%27%20rx%3D%272.2%27%20ry%3D%271.6%27%20fill%3D%27%23fff%27%20opacity%3D%27.75%27/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.rules strong{display:block;font-size:1.1rem}
+.notice-imgs{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.7rem}
+.notice-imgs a{display:block;max-width:100%}
+.notice-imgs img{max-width:min(100%,640px);max-height:560px;width:auto;border-radius:8px;box-shadow:var(--shadow);background:#fff}
+.file-btn{
+  display:inline-flex;align-items:center;gap:.45rem;margin-top:.6rem;padding:.45rem 1.1rem;min-height:44px;
+  border-radius:999px;background:var(--cherry);color:#fff;text-decoration:none;font-weight:700;
+}
+.file-btn:hover{background:#A91F34}
+.file-btn svg{width:1.1em;height:1.1em;flex:none}
+
+/* 行事曆 */
+.month{margin-bottom:2.25rem}
+.month h3{font-family:var(--font-hand);font-size:1.5rem;margin:0 0 .9rem}
+.events{list-style:none;margin:0;padding:0;display:grid;gap:.75rem}
+.event{display:flex;gap:1rem;align-items:flex-start;background:var(--paper);border-radius:14px;padding:.85rem 1rem;box-shadow:var(--shadow)}
+.event.past{opacity:.6}
+.event.next{outline:3px solid var(--cherry-bright);outline-offset:0}
+.day{flex:none;width:3.6rem;text-align:center;border-radius:10px;background:var(--blush);padding:.35rem 0;line-height:1.15}
+.day b{display:block;font-size:1.6rem;color:var(--cherry)}
+.day small{font-size:.85rem;color:var(--plum-soft)}
+.event h4{margin:.1rem 0 0;font-size:1.1rem}
+.event p{margin:.15rem 0 0;color:var(--plum-soft);font-size:.98rem}
+.tag{display:inline-block;margin-left:.4rem;font-size:.8rem;font-weight:700;color:#fff;background:var(--cherry);padding:.05rem .55rem;border-radius:999px;vertical-align:.15em}
+.text-btn{border:0;background:none;font:inherit;color:var(--cherry);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:.5rem 0}
+
+/* 狀態訊息 */
+.status{background:var(--paper);border-radius:14px;padding:1.25rem 1.5rem;box-shadow:var(--shadow);max-width:40em}
+.status.error{border-left:6px solid var(--cherry)}
+.loading-dots::after{content:"…";animation:dots 1.2s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"．"}50%{content:"．．"}75%{content:"．．．"}}
+
+/* 燈箱 */
+dialog.lightbox{border:0;padding:0;background:transparent;max-width:min(92vw,960px);max-height:92vh}
+dialog.lightbox::backdrop{background:rgba(52,38,72,.82)}
+.lb-inner{background:#fff;padding:.75rem .75rem 1rem;border-radius:6px}
+.lb-inner img{max-height:72vh;width:auto;margin:0 auto}
+.lb-cap{font-family:var(--font-hand);font-size:1.2rem;text-align:center;margin:.6rem 0 0}
+.lb-desc{text-align:center;color:var(--plum-soft);margin:.2rem 0 0}
+.lb-tools{display:flex;justify-content:center;gap:.75rem;margin-top:.75rem}
+
+footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--plum-soft);font-size:.9rem;text-align:center}
+
+@media (max-width:640px){
+  .cal{padding:1.9rem .6rem 1.1rem}
+  .cal-top{padding:0 .4rem}
+  .cal-month{font-size:1.45rem}
+  .cal-grid td{height:3.3rem}
+  .chips{display:none}
+  .dots{display:flex}
+  .day-num{width:1.75rem;height:1.75rem;font-size:.9rem}
+  .cal-top{flex-wrap:nowrap;gap:.35rem}
+  .cal-month{white-space:nowrap;font-size:1.3rem}
+  .cal-top .round-btn{width:36px;height:36px}
+  .today-btn{padding:.2rem .7rem;min-height:36px}
+  .agenda{margin-inline:.4rem}
+  .masthead{border-radius:0 0 20px 20px}
+  .logo{width:48px;height:48px}
+  .nav-btn{padding:.45rem .8rem}
+}
+@media (max-width:520px){
+  /* 佈告欄分頁籤：一排三個的小方塊，最多兩排 */
+  .cork-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4rem}
+  .cork-tabs a{display:block;text-align:center;padding:.3rem .2rem;font-size:.92rem;min-height:38px;line-height:1.6;white-space:nowrap}
+  .cork-title{font-size:1.7rem}
+  .cork-head{row-gap:.5rem}
+  /* 便條與須知：文字往左靠，櫻桃符號只跟著標題 */
+  .note{padding:2rem 1.1rem 1.25rem}
+  .rules li{padding-left:0}
+  .rules li::before{width:1.6rem;height:1.6rem;top:.05rem}
+  .rules strong{padding-left:2.1rem;min-height:1.7rem}
+  .nav{display:grid;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:.35rem;max-width:24rem}
+  .nav-btn{width:100%;justify-content:center;padding:.45rem .5rem}
+  .sub{left:0;right:0;translate:none;min-width:0}
+}
+@media (max-width:640px){
+  .corkboard{--frame:8px;border-radius:16px;padding:0 1rem 1.75rem}
+  .cork-head{margin:0 calc(-1rem - 1px) 2.5rem;padding:.25rem 1rem .9rem}
+  .week-nav{margin-left:0;width:100%}
+  .week-nav nav{flex:1}
+  .cork-tabs{margin-left:0;width:100%}
+  .photos{grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}
+  .board{gap:2.25rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+@media print{
+  body{background:#fff}
+  .nav-wrap,.week-nav,.video-btn,.skip{display:none}
+  .corkboard{background:#fff;box-shadow:none;border-width:2px}
+  .note{box-shadow:none;border:1px solid #ccc;rotate:0deg!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cherry" viewBox="0 0 40 40">
+    <path d="M21 5C18 12 14 17 12 23M21 5c1 7 4 13 7 18" stroke="#4E8A3F" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M21 5c5-4 11-3 14 1-5 3-10 3-14-1z" fill="#79B85F"/>
+    <circle cx="12" cy="28" r="8" fill="#C8283F"/>
+    <circle cx="28" cy="28" r="8" fill="#E2445C"/>
+    <ellipse cx="9.3" cy="25.2" rx="2.2" ry="1.6" fill="#fff" opacity=".75"/>
+    <ellipse cx="25.3" cy="25.2" rx="2.2" ry="1.6" fill="#fff" opacity=".75"/>
+  </symbol>
+  <symbol id="caret" viewBox="0 0 10 10"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="masthead">
+<header class="site-head">
+  <svg class="logo" aria-hidden="true"><use href="#cherry"/></svg>
+  <div>
+    <h1 class="site-title">115櫻桃班</h1>
+  </div>
+</header>
+
+<nav class="nav-wrap" aria-label="主選單">
+  <ul class="nav" id="nav"></ul>
+</nav>
+</div>
+
+<main id="main" tabindex="-1">
+  <div id="view"><p class="status" role="status">第一次載入時間會較久，請耐心等待<span class="loading-dots"></span></p></div>
+</main>
+
+<footer>
+  <p id="foot">115櫻桃班 幼幼班</p>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="相片檢視">
+  <div class="lb-inner">
+    <img id="lb-img" alt="" referrerpolicy="no-referrer">
+    <p class="lb-cap" id="lb-cap"></p>
+    <p class="lb-desc" id="lb-desc"></p>
+    <div class="lb-tools">
+      <button class="round-btn" id="lb-prev" type="button" aria-label="上一張">‹</button>
+      <button class="round-btn" id="lb-close" type="button" aria-label="關閉">✕</button>
+      <button class="round-btn" id="lb-next" type="button" aria-label="下一張">›</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* =========================================================
+   設定區：貼上 Google Apps Script 部署後的「網頁應用程式網址」
+   網址長這樣：https://script.google.com/macros/s/……/exec
+   留空白時，網站會顯示內建的示範資料。
+   ========================================================= */
+const CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbz2fBFwxKLy3I0cscudaUJqj8sNha9XrGMLmn4FMtmPCqrikAnVJLBKJjz7LCfX42kF/exec',
+  SHOW_GALLERY: false   // 主選單的「櫻桃畫廊」：true 顯示、false 隱藏（週報裡的畫廊不受影響）
+};
+
+/* ---------- 選單結構 ---------- */
+const MENU = [
+  { id:'weekly',  label:'每週週報', href:'#/weekly' },
+  { id:'sing',    label:'唱唱跳跳', children:[
+      { id:'songs',  label:'兒歌',   href:'#/sing/songs' },
+      { id:'rhymes', label:'手指謠', href:'#/sing/rhymes' } ] },
+  ...(CONFIG.SHOW_GALLERY ? [{ id:'gallery', label:'櫻桃畫廊', href:'#/gallery' }] : []),
+  { id:'board',   label:'公佈欄', children:[
+      { id:'calendar', label:'行事曆',   href:'#/board/calendar' },
+      { id:'leave',    label:'請假須知', href:'#/board/leave' },
+      { id:'pickup',   label:'接送須知', href:'#/board/pickup' },
+      { id:'medicine', label:'托藥須知', href:'#/board/medicine' },
+      { id:'health',   label:'衛教宣導', href:'#/board/health' } ] }
+];
+// 網址代號 → 試算表「須知」分頁的「類別」、頁面標題
+const NOTICE_TYPES = {
+  leave:    { cat:'請假', title:'請假須知' },
+  pickup:   { cat:'接送', title:'接送須知' },
+  medicine: { cat:'托藥', title:'托藥須知' },
+  health:   { cat:'衛教', title:'衛教宣導' }
+};
+
+/* ---------- 小工具 ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function rich(text){   // 換行轉段落；[文字](網址) 轉成連結；單獨的網址也會變連結
+  const safe = esc(text).replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g,
+    (m, label, url, bare) => `<a href="${url || bare}" target="_blank" rel="noopener">${label || bare}</a>`);
+  return safe.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+}
+const pin = () => `<svg class="pin" aria-hidden="true"><use href="#cherry"/></svg>`;
+const num = v => parseInt(String(v).replace(/[^\d]/g,''), 10) || 0;
+
+// Google 雲端硬碟的分享連結 → 可直接顯示的圖片網址
+function imageUrl(u){
+  if (!u) return '';
+  const m = u.match(/\/d\/([\w-]{20,})/) || u.match(/[?&]id=([\w-]{20,})/);
+  if (m) return `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1600`;
+  return u.trim().replace(/^http:\/\//i, 'https://');   // 網站是 https，http 圖片會被瀏覽器擋下
+}
+// 圖片載入失敗時換成可愛的預設圖，不顯示破圖
+const FALLBACK_IMG = {
+  book:  'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 120"><rect width="90" height="120" rx="4" fill="#F3ECFC"/><rect x="0" width="8" height="120" fill="#D9C9EE"/><text x="49" y="72" font-size="38" text-anchor="middle">📖</text></svg>`),
+  photo: 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#EDE5F7"/><text x="50" y="63" font-size="36" text-anchor="middle">🖼️</text></svg>`)
+};
+document.addEventListener('error', e => {
+  const img = e.target;
+  if (img.tagName !== 'IMG' || img.dataset.failed) return;
+  img.dataset.failed = '1';
+  img.src = FALLBACK_IMG[img.dataset.kind] || FALLBACK_IMG.photo;
+}, true);
+// YouTube 網址 → 影片 ID
+function youtubeId(u){
+  const m = String(u).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+// 日期字串 → Date（支援 2026/9/24、2026-09-24）
+function toDate(s){
+  const m = String(s).match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  const md = String(s).match(/^\s*(\d{1,2})[\/.-](\d{1,2})\s*$/);   // 沒寫年份，視為今年
+  return md ? new Date(new Date().getFullYear(), +md[1]-1, +md[2]) : null;
+}
+// 週報的起訖日期 → 「9/21（一）至 9/25（五）」（「起」欄也可以叫「週期」）
+function weekRange(w){
+  const fmt = v => { const d = toDate(v); return d ? `${d.getMonth()+1}/${d.getDate()}（${WEEKDAY[d.getDay()]}）` : String(v||'').trim(); };
+  const a = fmt(w['起'] ?? w['週期']), b = fmt(w['迄']);
+  return a && b ? `${a}至 ${b}` : (a || b);
+}
+
+const WEEKDAY = ['日','一','二','三','四','五','六'];
+
+/* ---------- 讀取資料 ---------- */
+const DATA = {};
+const DATA_KEYS = ['weekly','songs','rhymes','gallery','books','calendar','notices'];
+const CACHE_KEY = 'cherry-data-v1';     // 上次讀到的資料存在瀏覽器，下次先秀出來
+
+async function fetchRemote(){
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 20000);
+  let res;
+  try { res = await fetch(CONFIG.API_URL, { cache:'no-store', signal:ctrl.signal }); }   // 不要加自訂標頭，否則會被跨網域擋下
+  catch { throw new Error('連不到資料來源，請確認 API_URL 是否正確，以及 Apps Script 的存取權是否設為「所有人」。'); }
+  finally { clearTimeout(timer); }
+  if (!res.ok) throw new Error(`資料來源回應錯誤（${res.status}）`);
+  let json;
+  try { json = await res.json(); }
+  catch { throw new Error('資料來源回傳的不是資料，可能是 Apps Script 尚未授權或存取權不是「所有人」。'); }
+  if (!json.ok) throw new Error(`試算表讀取錯誤：${json.error}`);
+  return json;
+}
+function applyData(json){
+  DATA_KEYS.forEach(k => DATA[k] = Array.isArray(json.data && json.data[k]) ? json.data[k] : []);
+  DATA.updated = json.updated;
+}
+function readCache(){ try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
+function writeCache(json){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(json)); } catch {} }
+
+/* ---------- 選單 ---------- */
+function buildNav(){
+  $('#nav').style.setProperty('--cols', MENU.length <= 3 ? MENU.length : 2);
+  $('#nav').innerHTML = MENU.map(item => {
+    if (!item.children) return `<li><a class="nav-btn" data-id="${item.id}" href="${item.href}">${item.label}</a></li>`;
+    return `<li>
+      <button class="nav-btn" type="button" data-id="${item.id}" aria-expanded="false" aria-controls="sub-${item.id}">
+        ${item.label}<svg class="caret" aria-hidden="true"><use href="#caret"/></svg>
+      </button>
+      <ul class="sub" id="sub-${item.id}" hidden>
+        ${item.children.map(c => `<li><a href="${c.href}" data-id="${c.id}">${c.label}</a></li>`).join('')}
+      </ul></li>`;
+  }).join('');
+
+  const closeAll = except => document.querySelectorAll('.nav button[aria-expanded]').forEach(b => {
+    if (b === except) return;
+    b.setAttribute('aria-expanded','false'); $('#'+b.getAttribute('aria-controls')).hidden = true;
+  });
+  document.querySelectorAll('.nav button[aria-expanded]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      closeAll(btn);
+      btn.setAttribute('aria-expanded', String(!open));
+      $('#'+btn.getAttribute('aria-controls')).hidden = open;
+      if (!open) $('#'+btn.getAttribute('aria-controls')+' a').focus();
+    });
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.nav')) closeAll(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const openBtn = document.querySelector('.nav button[aria-expanded="true"]');
+    if (openBtn){ closeAll(); openBtn.focus(); }
+  });
+  $('#nav').addEventListener('click', e => { if (e.target.closest('.sub a')) closeAll(); });
+}
+function markNav(parts){
+  document.querySelectorAll('.nav [aria-current]').forEach(el => el.removeAttribute('aria-current'));
+  document.querySelectorAll('.nav .is-active').forEach(el => el.classList.remove('is-active'));
+  const top = document.querySelector(`.nav-btn[data-id="${parts[0]}"]`);
+  if (!top) return;
+  if (top.tagName === 'A') top.setAttribute('aria-current','page');
+  else {
+    top.classList.add('is-active');
+    const sub = document.querySelector(`#sub-${parts[0]} a[data-id="${parts[1]}"]`);
+    if (sub) sub.setAttribute('aria-current','page');
+  }
+}
+function tabs(groupId, current){
+  const g = MENU.find(m => m.id === groupId);
+  return `<ul class="cork-tabs" aria-label="${g.label}分類">${g.children.map(c =>
+    `<li><a href="${c.href}" ${c.id===current?'aria-current="page"':''}>${c.label}</a></li>`).join('')}</ul>`;
+}
+function corkPage({title, lead='', right='', body}){
+  return `<section class="corkboard" aria-labelledby="page-title">
+    <div class="cork-head">
+      <h2 class="cork-title page-title" id="page-title" tabindex="-1">${title}</h2>
+      ${lead ? `<span class="cork-lead">${lead}</span>` : ''}${right}
+    </div>
+    ${body}
+  </section>`;
+}
+function head(title, lead=''){
+  return `<div class="page-head"><div><h2 class="page-title" tabindex="-1">${title}</h2>${lead?`<p class="page-lead">${lead}</p>`:''}</div></div>`;
+}
+
+/* ---------- 共用區塊 ---------- */
+function songCard(s, kind, color){
+  const vid = youtubeId(s['影片網址']);
+  const video = vid
+    ? `<button class="video-btn" type="button" data-yt="${vid}" data-title="${esc(s['名稱'])}">▶ 播放影片</button>`
+    : (s['影片網址'] ? `<p><a href="${esc(s['影片網址'])}" target="_blank" rel="noopener">觀看影片</a></p>` : '');
+  return `<article class="note ${color}">${pin()}
+    <h3>${esc(s['名稱'])}</h3>
+    <p class="meta">${kind}${s['週次'] ? `，第 ${esc(s['週次'])} 週` : ''}</p>
+    <p class="lyrics">${esc(s['內容'])}</p>${video}</article>`;
+}
+function photoList(list){
+  if (!list.length) return '<p class="empty">這週還沒有放上照片。</p>';
+  return `<ul class="photos">${list.map(p => `<li><figure class="photo">
+      <button type="button" data-photo="${DATA.gallery.indexOf(p)}" aria-label="放大觀看：${esc(p['標題'])}">
+        <img src="${esc(imageUrl(p['圖片網址']))}" alt="${esc(p['標題'])}" loading="lazy" referrerpolicy="no-referrer" data-kind="photo"></button>
+      <figcaption>${esc(p['標題'])}</figcaption></figure></li>`).join('')}</ul>`;
+}
+
+/* ---------- 頁面：每週週報 ---------- */
+function viewWeekly(weekArg){
+  const weeks = [...DATA.weekly].sort((a,b) => num(a['週次']) - num(b['週次']));
+  if (!weeks.length) return corkPage({ title:'每週週報', body:'<p class="status">週報分頁目前沒有資料，請在試算表「週報」新增一列。</p>' });
+  let idx = weekArg ? weeks.findIndex(w => num(w['週次']) === num(weekArg)) : weeks.length - 1;
+  if (idx < 0) idx = weeks.length - 1;
+  const w = weeks[idx], no = num(w['週次']);
+  const same = r => num(r['週次']) === no;
+  const songs = DATA.songs.filter(same), rhymes = DATA.rhymes.filter(same), photos = DATA.gallery.filter(same), books = DATA.books.filter(same);
+
+  const dots = weeks.map((x,i) => { const n = num(x['週次']);
+    return `<li><a href="#/weekly/${n}" aria-label="第 ${n} 週，${esc(weekRange(x))}" ${i===idx?'aria-current="page"':''}>${n}</a></li>`; }).join('');
+  return `
+  <section class="corkboard" aria-labelledby="week-title">
+    <h2 class="page-title visually-hidden" tabindex="-1">每週週報</h2>
+    <div class="cork-head">
+      <p class="week-no" id="week-title">第 ${no} 週</p>
+      <span class="week-range">${esc(weekRange(w))}</span>
+      <span class="week-nav">
+        <button class="round-btn" type="button" data-week="${idx>0?num(weeks[idx-1]['週次']):''}" ${idx===0?'disabled':''} aria-label="上一週">‹</button>
+        ${weeks.length > 1 ? `<nav aria-label="選擇週次"><ol class="week-dots">${dots}</ol></nav>` : ''}
+        <button class="round-btn" type="button" data-week="${idx<weeks.length-1?num(weeks[idx+1]['週次']):''}" ${idx===weeks.length-1?'disabled':''} aria-label="下一週">›</button>
+      </span>
+    </div>
+    ${weekBoard(w, photos, songs, rhymes, books)}
+  </section>`;
+}
+
+function weekBoard(w, photos, songs, rhymes, books){
+  const parts = [];
+  if (w['櫻桃成長記']) parts.push(`<article class="note wide">${pin()}<h3>櫻桃成長記</h3><div class="prose">${rich(w['櫻桃成長記'])}</div></article>`);
+  if (w['櫻桃小須知']) parts.push(`<article class="note wide butter">${pin()}<h3>櫻桃小須知</h3><div class="prose">${rich(w['櫻桃小須知'])}</div></article>`);
+  if (photos.length)   parts.push(`<article class="note wide mint">${pin()}<h3>櫻桃畫廊</h3>${photoList(photos)}</article>`);
+  songs.forEach(x  => parts.push(songCard(x,'兒歌','blush')));
+  rhymes.forEach(x => parts.push(songCard(x,'手指謠','')));
+  if (books.length)    parts.push(`<article class="note wide lilac">${pin()}<h3>櫻桃書櫃</h3><ul class="books">${books.map(bookItem).join('')}</ul></article>`);
+  return parts.length ? `<div class="board">${parts.join('')}</div>` : '<p class="status">這一週的內容還在整理中。</p>';
+}
+function bookItem(b){
+  const cover = b['封面網址'] ? `<img src="${esc(imageUrl(b['封面網址']))}" alt="《${esc(b['書名'])}》封面" loading="lazy" referrerpolicy="no-referrer" data-kind="book">` : '';
+  return `<li class="book">${cover}<div>
+    <h4>《${esc(b['書名'])}》</h4>${b['作者'] ? `<p class="by">${esc(b['作者'])}</p>` : ''}
+    ${b['介紹'] ? `<div class="prose">${rich(b['介紹'])}</div>` : ''}</div></li>`;
+}
+
+/* ---------- 頁面：唱唱跳跳 ---------- */
+function viewSing(sub){
+  const isRhyme = sub === 'rhymes';
+  const list = [...(isRhyme ? DATA.rhymes : DATA.songs)].sort((a,b) => num(b['週次']) - num(a['週次']));
+  const kind = isRhyme ? '手指謠' : '兒歌';
+  return corkPage({ title:'唱唱跳跳', right:tabs('sing', isRhyme ? 'rhymes' : 'songs'),
+    body: list.length ? `<div class="board">${list.map((s,i) => songCard(s, kind, ['blush','','butter','mint'][i%4])).join('')}</div>`
+                      : `<p class="status">目前還沒有${kind}，請在試算表「${kind}」分頁新增。</p>` });
+}
+
+/* ---------- 頁面：櫻桃畫廊 ---------- */
+function viewGallery(){
+  const groups = {};
+  DATA.gallery.forEach(p => (groups[num(p['週次'])] ||= []).push(p));
+  const order = Object.keys(groups).map(Number).sort((a,b) => b-a);
+  const range = no => weekRange(DATA.weekly.find(w => num(w['週次'])===no) || {});
+  return corkPage({ title:'櫻桃畫廊', lead:'點照片可以放大看',
+    body: order.length ? order.map(no => `
+      <section class="gallery-group"><h3 class="cork-label">${no ? `第 ${no} 週` : '其他'}${range(no) ? `（${esc(range(no))}）` : ''}</h3>${photoList(groups[no])}</section>`).join('')
+      : '<p class="status">畫廊還沒有照片，敬請期待。</p>' });
+}
+
+/* ---------- 頁面：公佈欄 ---------- */
+/* 月曆狀態：目前顯示的月份、選取的日期 */
+const dayKey = d => `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+const TODAY = (() => { const t = new Date(); t.setHours(0,0,0,0); return t; })();
+let calMonth = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
+let calSel = new Date(TODAY);
+let calFocus = false;
+const isHoliday = e => /放假|補假|休假|停課|國定假日/.test(e['活動']);
+
+function calEvents(){
+  // 每個活動展開到它涵蓋的每一天（有填「結束日期」就是多日活動）
+  const map = {};
+  DATA.calendar.forEach(e => {
+    const s = toDate(e['日期']); if (!s) return;
+    let end = toDate(e['結束日期']); if (!end || end < s) end = s;
+    for (let d = new Date(s); d <= end; d.setDate(d.getDate()+1)){
+      (map[dayKey(d)] ||= []).push({ ...e, s, end });
+    }
+  });
+  return map;
+}
+function viewCalendar(){
+  const map = calEvents();
+  const y = calMonth.getFullYear(), m = calMonth.getMonth();
+  const first = new Date(y, m, 1);
+  const start = new Date(y, m, 1 - first.getDay());          // 從星期日開始
+  const weeks = Math.ceil((first.getDay() + new Date(y, m+1, 0).getDate()) / 7);
+  const fmt = d => `${d.getMonth()+1}/${d.getDate()}（${WEEKDAY[d.getDay()]}）`;
+
+  let rows = '';
+  for (let w = 0; w < weeks; w++){
+    rows += '<tr>';
+    for (let i = 0; i < 7; i++){
+      const d = new Date(start); d.setDate(start.getDate() + w*7 + i);
+      const evs = map[dayKey(d)] || [];
+      const sel = dayKey(d) === dayKey(calSel);
+      const cls = ['cal-day', d.getMonth() !== m && 'other', (i===0||i===6) && 'we', dayKey(d) === dayKey(TODAY) && 'today'].filter(Boolean).join(' ');
+      const label = `${d.getMonth()+1}月${d.getDate()}日 星期${WEEKDAY[i]}${dayKey(d)===dayKey(TODAY)?'，今天':''}${evs.length ? `，${evs.length} 個活動：${evs.map(e => e['活動']).join('、')}` : ''}`;
+      rows += `<td><button type="button" class="${cls}" data-day="${dayKey(d)}" aria-pressed="${sel}" aria-label="${esc(label)}" tabindex="${sel ? 0 : -1}">
+        <span class="day-num" aria-hidden="true">${d.getDate()}</span>
+        <span class="chips" aria-hidden="true">${evs.slice(0,3).map(e => `<span class="chip ${isHoliday(e)?'holiday':''}">${esc(e['活動'])}</span>`).join('')}${evs.length > 3 ? `<span class="more">還有 ${evs.length-3} 個</span>` : ''}</span>
+        <span class="dots" aria-hidden="true">${evs.slice(0,3).map(e => `<span class="dot ${isHoliday(e)?'holiday':''}"></span>`).join('')}</span>
+      </button></td>`;
+    }
+    rows += '</tr>';
+  }
+
+  const selEvs = map[dayKey(calSel)] || [];
+  const agenda = `<section class="agenda" aria-live="polite">
+    <h4>${fmt(calSel)}${dayKey(calSel)===dayKey(TODAY)?' 今天':''}</h4>
+    ${selEvs.length ? `<ul class="ag-list">${selEvs.map(e => `<li class="ag-item"><span class="ag-bar ${isHoliday(e)?'holiday':''}" aria-hidden="true"></span><div>
+        <b>${esc(e['活動'])}</b>
+        ${e.end > e.s ? `<span>${fmt(e.s)} 至 ${fmt(e.end)}</span>` : ''}
+        ${e['備註'] ? `<span>${esc(e['備註'])}</span>` : ''}</div></li>`).join('')}</ul>`
+      : '<p class="empty">這一天沒有活動。</p>'}
+  </section>`;
+
+  return corkPage({ title:'公佈欄', right:tabs('board','calendar'), body:`
+    <div class="cal">${pin()}
+      <div class="cal-top">
+        <h3 class="cal-month" aria-live="polite">${y} 年 ${m+1} 月</h3>
+        <button class="round-btn" type="button" data-cal="-1" aria-label="上個月">‹</button>
+        <button class="today-btn" type="button" data-cal="0">今天</button>
+        <button class="round-btn" type="button" data-cal="1" aria-label="下個月">›</button>
+      </div>
+      <table class="cal-grid" role="grid" aria-label="${y} 年 ${m+1} 月行事曆，可用方向鍵移動日期">
+        <thead><tr>${WEEKDAY.map((w,i) => `<th scope="col" class="${i===0||i===6?'we':''}"><abbr title="星期${w}">${w}</abbr></th>`).join('')}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="cal-legend" aria-hidden="true"><span><i></i>活動</span><span><i class="holiday"></i>放假</span></div>
+      ${agenda}
+    </div>` });
+}
+function calGo(date, focus){
+  calSel = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  calMonth = new Date(calSel.getFullYear(), calSel.getMonth(), 1);
+  calFocus = focus;
+  route();
+}
+function noticeImages(n){
+  // 「圖片網址」可放多張，一行一個網址
+  const urls = String(n['圖片網址'] || '').split(/\s+/).filter(u => /^https?:\/\//i.test(u));
+  if (!urls.length) return '';
+  return `<div class="notice-imgs">${urls.map((u, i) => { const src = esc(imageUrl(u));
+    return `<a href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="${esc(n['標題'])}說明圖${urls.length > 1 ? `（${i+1}）` : ''}" loading="lazy" referrerpolicy="no-referrer" data-kind="photo"><span class="visually-hidden">（點圖另開新視窗放大）</span></a>`; }).join('')}</div>`;
+}
+function fileButton(n){
+  const url = (n['附件網址'] || '').trim();
+  if (!/^https?:\/\//i.test(url)) return '';
+  const name = n['附件名稱'] || '附件';
+  return `<a class="file-btn" href="${esc(url)}" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    下載：${esc(name)}<span class="visually-hidden">（另開新視窗）</span></a>`;
+}
+function viewNotice(type){
+  const { cat, title } = NOTICE_TYPES[type];
+  const list = DATA.notices.filter(n => n['類別'] === cat);
+  return corkPage({ title:'公佈欄', right:tabs('board', type), body:`
+    <div class="board"><article class="note wide">${pin()}<h3>${title}</h3>
+    ${list.length ? `<ul class="rules">${list.map(n => `<li><strong>${esc(n['標題'])}</strong>${n['內容'] ? `<div class="prose">${rich(n['內容'])}</div>` : ''}${noticeImages(n)}${fileButton(n)}</li>`).join('')}</ul>`
+                  : `<p class="empty">尚未填寫。請在試算表「須知」分頁新增類別為「${cat}」的資料。</p>`}
+    </article></div>` });
+}
+
+/* ---------- 路由 ---------- */
+function route(){
+  const parts = location.hash.replace(/^#\/?/,'').split('/').filter(Boolean);
+  if (!parts.length) parts.push('weekly');
+  let html, title;
+  switch (parts[0]){
+    case 'sing':    parts[1] ||= 'songs';    html = viewSing(parts[1]); title = parts[1]==='rhymes'?'手指謠':'兒歌'; break;
+    case 'gallery': if (CONFIG.SHOW_GALLERY){ html = viewGallery(); title = '櫻桃畫廊'; break; } parts[0] = 'weekly'; html = viewWeekly(); title = '每週週報'; break;
+    case 'board':
+      parts[1] ||= 'calendar';
+      html = parts[1] === 'calendar' ? viewCalendar() : viewNotice(NOTICE_TYPES[parts[1]] ? parts[1] : 'leave');
+      title = parts[1] === 'calendar' ? '行事曆' : (NOTICE_TYPES[parts[1]] || NOTICE_TYPES.leave).title; break;
+    default:        parts[0] = 'weekly'; html = viewWeekly(parts[1]); title = '每週週報';
+  }
+  $('#view').innerHTML = html;
+  if (calFocus){ calFocus = false; const b = document.querySelector('.cal-day[aria-pressed="true"]'); if (b) b.focus(); }
+  const cur = document.querySelector('.week-dots [aria-current]');
+  if (cur){ const box = cur.parentElement.parentElement; box.scrollLeft = cur.offsetLeft - (box.clientWidth - cur.offsetWidth) / 2; }
+  document.title = `${title}｜115櫻桃班 親師公告欄`;
+  markNav(parts);
+  return parts;
+}
+let firstRoute = true;
+function onRoute(){
+  route();
+  if (!firstRoute){ const t = $('.page-title'); if (t) t.focus({preventScroll:true}); window.scrollTo({top:0}); }
+  firstRoute = false;
+}
+
+/* ---------- 互動 ---------- */
+document.addEventListener('click', e => {
+  const wk = e.target.closest('[data-week]');
+  if (wk && wk.dataset.week){ location.hash = `#/weekly/${wk.dataset.week}`; return; }
+  const yt = e.target.closest('[data-yt]');
+  if (yt){
+    const f = document.createElement('iframe');
+    f.className = 'video'; f.title = `${yt.dataset.title} 影片`;
+    f.src = `https://www.youtube-nocookie.com/embed/${yt.dataset.yt}?autoplay=1&rel=0`;
+    f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
+    yt.replaceWith(f); return;
+  }
+  const ph = e.target.closest('[data-photo]');
+  if (ph){ openLightbox(+ph.dataset.photo, ph); return; }
+  const cal = e.target.closest('[data-cal]');
+  if (cal){ const n = +cal.dataset.cal;
+    if (n === 0) calGo(TODAY, false);
+    else calGo(new Date(calMonth.getFullYear(), calMonth.getMonth() + n, 1), false);
+    return; }
+  const day = e.target.closest('[data-day]');
+  if (day){ const [yy,mm,dd] = day.dataset.day.split('-').map(Number); calGo(new Date(yy, mm-1, dd), true); return; }
+});
+document.addEventListener('keydown', e => {
+  if (!e.target.matches || !e.target.matches('.cal-day')) return;
+  const step = { ArrowLeft:-1, ArrowRight:1, ArrowUp:-7, ArrowDown:7 }[e.key];
+  if (!step) return;
+  e.preventDefault();
+  const d = new Date(calSel); d.setDate(d.getDate() + step); calGo(d, true);
+});
+document.addEventListener('change', e => {
+});
+
+/* ---------- 燈箱 ---------- */
+let lbList = [], lbPos = 0, lbReturn = null;
+function openLightbox(i, from){
+  const p = DATA.gallery[i];
+  lbList = DATA.gallery.filter(x => x['週次'] === p['週次']);
+  lbPos = lbList.indexOf(p); lbReturn = from;
+  showLb(); $('#lightbox').showModal();
+}
+function showLb(){
+  const p = lbList[lbPos];
+  delete $('#lb-img').dataset.failed; $('#lb-img').src = imageUrl(p['圖片網址']); $('#lb-img').alt = p['標題'];
+  $('#lb-cap').textContent = p['標題'];
+  $('#lb-desc').textContent = [p['日期'], p['說明']].filter(Boolean).join('　');
+  $('#lb-prev').disabled = lbPos === 0; $('#lb-next').disabled = lbPos === lbList.length - 1;
+}
+$('#lb-prev').onclick = () => { if (lbPos > 0){ lbPos--; showLb(); } };
+$('#lb-next').onclick = () => { if (lbPos < lbList.length-1){ lbPos++; showLb(); } };
+$('#lb-close').onclick = () => $('#lightbox').close();
+$('#lightbox').addEventListener('close', () => { if (lbReturn) lbReturn.focus(); });
+$('#lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') e.target.close(); });
+$('#lightbox').addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') $('#lb-prev').click();
+  if (e.key === 'ArrowRight') $('#lb-next').click();
+});
+
+/* =========================================================
+   示範資料（API_URL 空白時使用）欄位名稱與試算表相同
+   ========================================================= */
+const ph = (emoji, bg) => 'data:image/svg+xml,' + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><rect width="300" height="300" fill="${bg}"/><text x="150" y="190" font-size="130" text-anchor="middle">${emoji}</text></svg>`);
+const DEMO = {
+  weekly: [
+    { '週次':'3', '起':'2026/09/14', '迄':'2026/09/18',
+      '櫻桃成長記':'這週寶貝們認識了自己的小手：小手可以拍拍、可以握握，還可以幫忙收玩具。\n\n週三的蓋手印活動，大家都勇敢地把手放進顏料裡，笑得好開心！',
+      '櫻桃小須知':'1. 請幫寶貝準備一條可替換的小毛巾，放在書包裡。\n2. 指甲請記得修剪，避免玩耍時刮傷。' },
+    { '週次':'4', '起':'2026/09/21', '迄':'2026/09/25',
+      '櫻桃成長記':'中秋節快到了，我們一起看月亮的圖卡，說說月亮像什麼。有寶貝說像「大餅乾」，也有寶貝說像「媽媽的鏡子」。\n\n週四的柚子帽活動，請大家期待照片！',
+      '櫻桃小須知':'1. 9/24（四）中秋活動，當天可穿著輕便服裝。\n2. 9/25（五）中秋節放假一天。\n3. 天氣轉涼，請在書包放一件薄外套。' }
+  ],
+  songs: [
+    { '週次':'3', '名稱':'洗洗小手', '內容':'搓搓手心，搓搓手背，\n手指縫縫也要洗；\n泡泡滑滑像小魚，\n沖一沖，香香又乾淨。', '影片網址':'' },
+    { '週次':'4', '名稱':'紅紅小櫻桃', '內容':'小櫻桃，圓又圓，\n手牽手，掛樹邊；\n風兒吹，搖一搖，\n我們一起笑瞇瞇。', '影片網址':'' }
+  ],
+  rhymes: [
+    { '週次':'3', '名稱':'小手拍拍', '內容':'小手拍拍（雙手拍兩下）\n小手搖搖（左右搖一搖）\n小手藏起來（手放到背後）\n變出一個大擁抱（張開雙手抱自己）', '影片網址':'' },
+    { '週次':'4', '名稱':'五隻小毛蟲', '內容':'一隻小毛蟲，爬呀爬（食指彎彎往前爬）\n兩隻小毛蟲，找朋友（伸出兩根手指）\n三隻、四隻、五隻小毛蟲（一根一根伸出來）\n睡一覺，變蝴蝶，飛呀飛（大拇指相扣，手掌拍動）', '影片網址':'' }
+  ],
+  gallery: [
+    { '週次':'3', '日期':'2026/09/16', '標題':'蓋手印', '圖片網址':ph('🖐️','#FDE6EA'), '說明':'紅紅綠綠的手印排排站' },
+    { '週次':'3', '日期':'2026/09/17', '標題':'收玩具小幫手', '圖片網址':ph('🧸','#FFF4CC'), '說明':'' },
+    { '週次':'3', '日期':'2026/09/18', '標題':'點心時間', '圖片網址':ph('🍎','#E4F2DC'), '說明':'' },
+    { '週次':'4', '日期':'2026/09/22', '標題':'看月亮圖卡', '圖片網址':ph('🌕','#E9E0F6'), '說明':'月亮像什麼呢？' },
+    { '週次':'4', '日期':'2026/09/23', '標題':'做兔子燈籠', '圖片網址':ph('🐰','#FDE6EA'), '說明':'' }
+  ],
+  books: [
+    { '週次':'4', '書名':'月亮船', '作者':'示範資料', '封面網址':ph('🌙','#E9E0F6'), '介紹':'小熊坐上彎彎的月亮船去找星星。故事短短的，很適合睡前一起讀。' },
+    { '週次':'4', '書名':'兔子做月餅', '作者':'示範資料', '封面網址':ph('🥮','#FFF4CC'), '介紹':'讀完可以和寶貝一起數一數，兔子做了幾個月餅？' }
+  ],
+  calendar: [
+    { '日期':'2026/09/01', '活動':'開學日', '備註':'' },
+    { '日期':'2026/09/11', '活動':'新生家長說明會', '備註':'晚上 7:00，櫻桃班教室' },
+    { '日期':'2026/09/24', '活動':'中秋節慶祝活動', '備註':'穿輕便服裝' },
+    { '日期':'2026/09/25', '活動':'中秋節放假', '備註':'' },
+    { '日期':'2026/10/07', '活動':'親師座談會', '備註':'下午 4:30，歡迎家長參加' },
+    { '日期':'2026/10/16', '活動':'幼兒健康檢查', '備註':'請於前一天繳回健康資料表' },
+    { '日期':'2026/10/19', '結束日期':'2026/10/23', '活動':'親子共讀週', '備註':'每天帶一本喜歡的繪本到校' },
+    { '日期':'2026/10/30', '活動':'萬聖節變裝遊行', '備註':'可自備簡單裝扮' }
+  ],
+  notices: [
+    { '類別':'請假', '標題':'事先告知', '內容':'請於當天上午 8:30 前，以電話或聯絡簿告知老師。' },
+    { '類別':'請假', '標題':'病假', '內容':'如有發燒、嘔吐、腹瀉等症狀，請在家休息，退燒滿 24 小時後再到校。' },
+    { '類別':'請假', '標題':'傳染性疾病', '內容':'若經醫師診斷為腸病毒、流感等傳染性疾病，請主動告知老師，以便班級做好防護。' },
+    { '類別':'接送', '標題':'上學時間', '內容':'早上 7:30 至 8:30 入園，請陪寶貝走到教室門口交給老師。' },
+    { '類別':'接送', '標題':'放學時間', '內容':'下午 4:00 至 5:00，請至教室接回寶貝。' },
+    { '類別':'接送', '標題':'代接', '內容':'由非固定接送人接回時，請事先告知老師代接者姓名，接送時請出示證件。' },
+    { '類別':'托藥', '標題':'填寫托藥單', '內容':'請在聯絡簿內的托藥單寫清楚：藥名、服用時間、劑量，並簽名。' },
+    { '類別':'托藥', '標題':'藥品準備', '內容':'請將單次藥量分裝好，並在藥袋寫上寶貝的名字。' },
+    { '類別':'衛教', '標題':'正確洗手五步驟', '內容':'濕、搓、沖、捧、擦。飯前、如廁後、玩耍後都要洗手，搓手至少 20 秒。' },
+    { '類別':'衛教', '標題':'腸病毒流行期', '內容':'若孩子手、腳、口出現紅疹或水泡，請盡速就醫並在家休息，並告知老師。' },
+    { '類別':'托藥', '標題':'托藥委託單', '內容':'第一次托藥前，請先下載填寫，交給老師。', '附件名稱':'托藥委託單', '附件網址':'https://example.com/' },
+    { '類別':'托藥', '標題':'親手交給老師', '內容':'藥品請親手交給老師，不要放在書包裡。' }
+  ]
+};
+
+/* ---------- 啟動 ----------
+   有上次的資料就先顯示（幾乎瞬間），同時在背景向 Apps Script 要最新資料，
+   有變動才重新畫面，家長不用每次等 Apps Script 開機。 */
+let started = false;
+function setFoot(mode){
+  $('#foot').textContent = mode === 'demo'
+    ? '115櫻桃班 幼幼班（目前顯示示範資料）'
+    : `115櫻桃班 幼幼班　資料更新於 ${new Date(DATA.updated || Date.now()).toLocaleString('zh-TW',{hour12:false})}`;
+}
+function start(mode){
+  started = true;
+  setFoot(mode);
+  window.addEventListener('hashchange', onRoute);
+  onRoute();
+}
+function showError(err){
+  console.warn('資料讀取失敗：', err);   // 技術細節留在瀏覽器主控台，方便老師排查
+  $('#view').innerHTML = `<div class="status error" role="alert"><h2 class="page-title">資料讀取失敗</h2>
+    <p>請洽 <a href="mailto:f050359@gmail.com">f050359@gmail.com</a></p></div>`;
 }
 
 buildNav();
