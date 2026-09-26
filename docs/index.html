@@ -1,26 +1,27 @@
-<!DOCTYPE html>
-<html lang="zh-Hant-TW">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- 請搜尋引擎不要收錄這個網站，也不要保存頁面快取 -->
-<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
-<title>115櫻桃班 親師公告欄</title>
-<meta name="description" content="幼幼班櫻桃班的每週週報、兒歌手指謠、班級畫廊與各項須知">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍒</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;600;700&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
-<style>
-/* ============ 色彩與字型 ============ */
-:root{
-  --bg:#EDE5F7;          /* 淺紫底色 */
-  --bg-dot:#E2D6F1;      /* 底紋圓點 */
-  --paper:#FFFDF7;       /* 便條紙 */
-  --blush:#FDE6EA;       /* 粉紅便條 */
-  --butter:#FFF4CC;      /* 奶油黃便條 */
-  --mint:#E4F2DC;        /* 薄荷綠便條 */
-  --cherry:#C8283F;      /* 櫻桃紅（文字用，對比足夠） */
-  --cherry-bright:#E2445C;
-  --leaf:#4E8A3F;
-  --plum:#43345A;        /* 主要文字 */
+}
+
+buildNav();
+if (!CONFIG.API_URL){
+  Object.assign(DATA, DEMO); start('demo');
+} else {
+  const cached = readCache();
+  if (cached && cached.data){ applyData(cached); start('cache'); }
+  fetchRemote().then(json => {
+    const changed = !cached || JSON.stringify(cached.data) !== JSON.stringify(json.data);
+    writeCache(json);
+    applyData(json);
+    if (!started) start('sheet');
+    else {
+      setFoot('sheet');
+      if (changed && !$('#lightbox').open){          // 有新資料才重畫，不打斷正在看大圖的人
+        const y = window.scrollY; route(); window.scrollTo(0, y);
+      }
+    }
+  }).catch(err => {
+    if (!started) showError(err);
+    else console.warn('背景更新失敗，先顯示上次的資料', err);
+  });
+}
+</script>
+</body>
+</html>
