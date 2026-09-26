@@ -79,7 +79,8 @@ a{color:var(--cherry)}
   border-radius:14px;box-shadow:var(--shadow);border:2px dashed #E7DBF3;
 }
 .sub[hidden]{display:none}
-.sub a{display:block;padding:.45rem .8rem;border-radius:10px;text-decoration:none;color:var(--plum);font-weight:600}
+.lbl-short{display:none}
+.sub a{white-space:nowrap;display:block;padding:.45rem .8rem;border-radius:10px;text-decoration:none;color:var(--plum);font-weight:600}
 .sub a:hover{background:var(--blush)}
 .sub a[aria-current="page"]{color:var(--cherry);background:var(--blush)}
 
@@ -328,7 +329,10 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
   .rules strong{padding-left:2.1rem;min-height:1.7rem}
   .nav{display:grid;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:.35rem;max-width:24rem}
   .nav-btn{width:100%;justify-content:center;padding:.45rem .5rem}
-  .sub{left:0;right:0;translate:none;min-width:0}
+  .lbl-full{display:none}
+  .lbl-short{display:inline}
+  .sub{left:0;right:auto;translate:none;min-width:100%}
+  .nav>li:last-child .sub{left:auto;right:0}
 }
 @media (max-width:640px){
   .corkboard{--frame:8px;border-radius:16px;padding:0 1rem 1.75rem}
@@ -419,11 +423,11 @@ const MENU = [
   ...(CONFIG.SHOW_GALLERY ? [{ id:'gallery', label:'櫻桃畫廊', href:'#/gallery' }] : []),
   { id:'board',   label:'佈告欄', children:[
       { id:'calendar', label:'行事曆',   href:'#/board/calendar' },
-      { id:'leave',    label:'請假須知', href:'#/board/leave' },
-      { id:'pickup',   label:'接送須知', href:'#/board/pickup' },
-      { id:'medicine', label:'托藥須知', href:'#/board/medicine' },
-      { id:'health',   label:'衛教宣導', href:'#/board/health' },
-      { id:'menu',     label:'每月菜單', href:'#/board/menu' } ] }
+      { id:'leave',    label:'請假須知', short:'請假', href:'#/board/leave' },
+      { id:'pickup',   label:'接送須知', short:'接送', href:'#/board/pickup' },
+      { id:'medicine', label:'托藥須知', short:'托藥', href:'#/board/medicine' },
+      { id:'health',   label:'衛教宣導', short:'衛教', href:'#/board/health' },
+      { id:'menu',     label:'每月菜單', short:'菜單', href:'#/board/menu' } ] }
 ];
 // 網址代號 → 試算表「須知」分頁的「類別」、頁面標題
 const NOTICE_TYPES = {
@@ -511,6 +515,8 @@ function readCache(){ try { return JSON.parse(localStorage.getItem(CACHE_KEY)); 
 function writeCache(json){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(json)); } catch {} }
 
 /* ---------- 選單 ---------- */
+const lbl = c => c.short ? `<span class="lbl-full">${c.label}</span><span class="lbl-short">${c.short}</span>` : c.label;
+
 function buildNav(){
   $('#nav').style.setProperty('--cols', MENU.length <= 3 ? MENU.length : 2);
   $('#nav').innerHTML = MENU.map(item => {
@@ -520,7 +526,7 @@ function buildNav(){
         ${item.label}<svg class="caret" aria-hidden="true"><use href="#caret"/></svg>
       </button>
       <ul class="sub" id="sub-${item.id}" hidden>
-        ${item.children.map(c => `<li><a href="${c.href}" data-id="${c.id}">${c.label}</a></li>`).join('')}
+        ${item.children.map(c => `<li><a href="${c.href}" data-id="${c.id}">${lbl(c)}</a></li>`).join('')}
       </ul></li>`;
   }).join('');
 
@@ -576,7 +582,7 @@ function markNav(parts){
 function tabs(groupId, current){
   const g = MENU.find(m => m.id === groupId);
   return `<ul class="cork-tabs" aria-label="${g.label}分類">${g.children.map(c =>
-    `<li><a href="${c.href}" data-id="${c.id}" ${c.id===current?'aria-current="page"':''}>${c.label}</a></li>`).join('')}</ul>`;
+    `<li><a href="${c.href}" data-id="${c.id}" ${c.id===current?'aria-current="page"':''}>${lbl(c)}</a></li>`).join('')}</ul>`;
 }
 function corkPage({title, lead='', right='', body}){
   return `<section class="corkboard" aria-labelledby="page-title">
