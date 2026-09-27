@@ -200,14 +200,23 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 }
 .cal-day:hover{background:#FBF7FE}
 .cal-day:focus-visible{outline:3px solid var(--lilac);outline-offset:-3px}
-.cal-day[aria-pressed="true"]{background:#F3ECFC}
+.cal-day[aria-pressed="true"]{background:#F3ECFC;box-shadow:inset 0 0 0 2px var(--lilac)}
+/* 放假日：整格粉紅底、紅色日期、紅字假日名稱 */
+.cal-day.hol{background:#FDE6EA}
+.cal-day.hol:hover{background:#FBD8DF}
+.cal-day.hol[aria-pressed="true"]{background:#FBD8DF}
+.cal-day.hol .day-num{color:var(--cherry)}
+.cal-day.hol.today .day-num{color:#fff}
+.hol-name{display:block;max-width:100%;padding:0 4px;font-size:.8rem;font-weight:700;line-height:1.4;color:var(--cherry);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.hol-mark{display:none;font-size:.72rem;font-weight:700;line-height:1;color:var(--cherry);margin-top:.15rem}
 .day-num{display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:50%;font-weight:700;font-size:.95rem;flex:none}
 .cal-day.we .day-num{color:var(--cherry)}
 .cal-day.today .day-num{background:var(--cherry);color:#fff}
 .cal-day.other{opacity:.4}
 .chips{display:flex;flex-direction:column;gap:2px;width:100%;margin-top:.2rem;min-width:0}
 .chip{display:block;font-size:.78rem;line-height:1.4;padding:1px 6px;border-radius:4px;background:#6C52A0;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chip.holiday,.dot.holiday,.ag-bar.holiday{background:var(--cherry)}
+.ag-bar.holiday{background:var(--cherry)}
+.ag-item .ag-tag,.ag-tag{display:inline-block;margin-left:.45rem;padding:0 .55rem;border-radius:999px;background:var(--cherry);color:#fff;font-size:.78rem;font-weight:700;vertical-align:.12em;line-height:1.6}
 .more{font-size:.75rem;color:var(--plum-soft);padding-left:6px}
 .dots{display:none;gap:3px;margin-top:.25rem}
 .dot{width:6px;height:6px;border-radius:50%;background:#6C52A0}
@@ -220,7 +229,7 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .ag-item span{display:block;color:var(--plum-soft);font-size:.95rem}
 .cal-legend{display:flex;gap:1rem;margin-top:1rem;font-size:.85rem;color:var(--plum-soft);flex-wrap:wrap}
 .cal-legend i{display:inline-block;width:.8rem;height:.8rem;border-radius:3px;background:#6C52A0;margin-right:.35rem;vertical-align:-.05em}
-.cal-legend i.holiday{background:var(--cherry)}
+.cal-legend i.holiday{background:#FDE6EA;box-shadow:inset 0 0 0 1.5px var(--cherry)}
 .cork-more .text-btn{background:var(--paper);padding:.55rem 1.3rem;border-radius:999px;text-decoration:none;box-shadow:var(--shadow);min-height:44px}
 .round-btn{
   width:44px;height:44px;border-radius:50%;border:2px solid var(--lilac);background:#fff;color:var(--plum);
@@ -306,6 +315,7 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
   .cal-grid td{height:3.3rem}
   .chips{display:none}
   .dots{display:flex}
+  .hol-mark{display:block}
   .day-num{width:1.75rem;height:1.75rem;font-size:.9rem}
   .cal-top{flex-wrap:nowrap;gap:.35rem}
   .cal-month{white-space:nowrap;font-size:1.3rem}
@@ -719,12 +729,14 @@ function viewCalendar(){
       const d = new Date(start); d.setDate(start.getDate() + w*7 + i);
       const evs = map[dayKey(d)] || [];
       const sel = dayKey(d) === dayKey(calSel);
-      const cls = ['cal-day', d.getMonth() !== m && 'other', (i===0||i===6) && 'we', dayKey(d) === dayKey(TODAY) && 'today'].filter(Boolean).join(' ');
-      const label = `${d.getMonth()+1}月${d.getDate()}日 星期${WEEKDAY[i]}${dayKey(d)===dayKey(TODAY)?'，今天':''}${evs.length ? `，${evs.length} 個活動：${evs.map(e => e['活動']).join('、')}` : ''}`;
+      const hol = evs.filter(isHoliday), act = evs.filter(e => !isHoliday(e));
+      const cls = ['cal-day', d.getMonth() !== m && 'other', (i===0||i===6) && 'we', dayKey(d) === dayKey(TODAY) && 'today', hol.length && 'hol'].filter(Boolean).join(' ');
+      const label = `${d.getMonth()+1}月${d.getDate()}日 星期${WEEKDAY[i]}${dayKey(d)===dayKey(TODAY)?'，今天':''}${hol.length ? '，放假' : ''}${evs.length ? `，${evs.length} 個活動：${evs.map(e => e['活動']).join('、')}` : ''}`;
       rows += `<td><button type="button" class="${cls}" data-day="${dayKey(d)}" aria-pressed="${sel}" aria-label="${esc(label)}" tabindex="${sel ? 0 : -1}">
         <span class="day-num" aria-hidden="true">${d.getDate()}</span>
-        <span class="chips" aria-hidden="true">${evs.slice(0,3).map(e => `<span class="chip ${isHoliday(e)?'holiday':''}">${esc(e['活動'])}</span>`).join('')}${evs.length > 3 ? `<span class="more">還有 ${evs.length-3} 個</span>` : ''}</span>
-        <span class="dots" aria-hidden="true">${evs.slice(0,3).map(e => `<span class="dot ${isHoliday(e)?'holiday':''}"></span>`).join('')}</span>
+        ${hol.length ? `<span class="hol-mark" aria-hidden="true">休</span>` : ''}
+        <span class="chips" aria-hidden="true">${hol.slice(0,1).map(e => `<span class="hol-name">${esc(e['活動'])}</span>`).join('')}${act.slice(0,3 - Math.min(hol.length,1)).map(e => `<span class="chip">${esc(e['活動'])}</span>`).join('')}${act.length > 3 - Math.min(hol.length,1) ? `<span class="more">還有 ${act.length - (3 - Math.min(hol.length,1))} 個</span>` : ''}</span>
+        <span class="dots" aria-hidden="true">${act.slice(0,3).map(() => `<span class="dot"></span>`).join('')}</span>
       </button></td>`;
     }
     rows += '</tr>';
@@ -734,7 +746,7 @@ function viewCalendar(){
   const agenda = `<section class="agenda" aria-live="polite">
     <h4>${fmt(calSel)}${dayKey(calSel)===dayKey(TODAY)?' 今天':''}</h4>
     ${selEvs.length ? `<ul class="ag-list">${selEvs.map(e => `<li class="ag-item"><span class="ag-bar ${isHoliday(e)?'holiday':''}" aria-hidden="true"></span><div>
-        <b>${esc(e['活動'])}</b>
+        <b>${esc(e['活動'])}${isHoliday(e) ? '<span class="ag-tag">放假</span>' : ''}</b>
         ${e.end > e.s ? `<span>${fmt(e.s)} 至 ${fmt(e.end)}</span>` : ''}
         ${e['備註'] ? `<span>${esc(e['備註'])}</span>` : ''}</div></li>`).join('')}</ul>`
       : '<p class="empty">這一天沒有活動。</p>'}
@@ -752,7 +764,7 @@ function viewCalendar(){
         <thead><tr>${WEEKDAY.map((w,i) => `<th scope="col" class="${i===0||i===6?'we':''}"><abbr title="星期${w}">${w}</abbr></th>`).join('')}</tr></thead>
         <tbody>${rows}</tbody>
       </table>
-      <div class="cal-legend" aria-hidden="true"><span><i></i>活動</span><span><i class="holiday"></i>放假</span></div>
+      <div class="cal-legend" aria-hidden="true"><span><i></i>活動</span><span><i class="holiday"></i>放假日</span></div>
       ${agenda}
     </div>` });
 }
