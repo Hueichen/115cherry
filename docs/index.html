@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- 請搜尋引擎不要收錄這個網站，也不要保存頁面快取 -->
 <meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
-<title>115櫻桃班 親師公告欄</title>
+<title>115櫻桃班佈告欄</title>
 <meta name="description" content="幼幼班櫻桃班的每週週報、兒歌手指謠、班級畫廊與各項須知">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍒</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -421,8 +421,33 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
    ========================================================= */
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbz2fBFwxKLy3I0cscudaUJqj8sNha9XrGMLmn4FMtmPCqrikAnVJLBKJjz7LCfX42kF/exec',
-  SHOW_GALLERY: false   // 主選單的「櫻桃畫廊」：true 顯示、false 隱藏（週報裡的畫廊不受影響）
+  SHOW_GALLERY: false,  // 主選單的「櫻桃畫廊」：true 顯示、false 隱藏（週報裡的畫廊不受影響）
+  GA_ID: 'G-7217Q3SV2K'             // Google Analytics 評估 ID，例如 'G-ABC123XYZ'；留空白就不追蹤
 };
+
+/* ---------- Google Analytics ----------
+   這個網站用 #/ 切換頁面，GA 預設抓不到，所以每次換頁由程式自己送出 page_view。 */
+function initGA(){
+  if (!CONFIG.GA_ID) return;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(CONFIG.GA_ID)}`;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', CONFIG.GA_ID, { send_page_view:false });
+}
+function trackPage(){
+  if (!window.gtag) return;
+  gtag('event', 'page_view', {
+    page_title: document.title,
+    page_location: location.href,
+    page_path: location.pathname + location.hash.replace(/^#/, '')
+  });
+}
+function trackEvent(name, params){ if (window.gtag) gtag('event', name, params); }
+initGA();
 
 /* ---------- 選單結構 ---------- */
 const MENU = [
@@ -818,7 +843,7 @@ function route(){
   if (calFocus){ calFocus = false; const b = document.querySelector('.cal-day[aria-pressed="true"]'); if (b) b.focus(); }
   const cur = document.querySelector('.week-dots [aria-current]');
   if (cur){ const box = cur.parentElement.parentElement; box.scrollLeft = cur.offsetLeft - (box.clientWidth - cur.offsetWidth) / 2; }
-  document.title = `${title}｜115櫻桃班 親師公告欄`;
+  document.title = `${title}｜115櫻桃班佈告欄`;
   markNav(parts);
   refreshMenuLinks();
   return parts;
@@ -826,12 +851,15 @@ function route(){
 let firstRoute = true;
 function onRoute(){
   route();
+  trackPage();
   if (!firstRoute){ const t = $('.page-title'); if (t) t.focus({preventScroll:true}); window.scrollTo({top:0}); }
   firstRoute = false;
 }
 
 /* ---------- 互動 ---------- */
 document.addEventListener('click', e => {
+  const file = e.target.closest('a.file-btn, a[data-id="menu"][target]');
+  if (file) trackEvent('open_file', { file_name: file.textContent.replace(/（.*?）/g,'').trim(), link_url: file.href });
   const wk = e.target.closest('[data-week]');
   if (wk && wk.dataset.week){ location.hash = `#/weekly/${wk.dataset.week}`; return; }
   const yt = e.target.closest('[data-yt]');
