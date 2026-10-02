@@ -297,11 +297,14 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .event h4{margin:.1rem 0 0;font-size:1.1rem}
 .event p{margin:.15rem 0 0;color:var(--plum-soft);font-size:.98rem}
 /* 月曆下方：當月活動清單 */
-.month-list{margin-top:1.25rem;padding-top:1rem;border-top:2px dashed #EADFF3}
-.month-list h4.ml-title{margin:0 0 .3rem;font-family:var(--font-hand);font-size:1.35rem}
-.month-list .event{box-shadow:none;background:none;border-radius:10px;padding:.7rem .4rem;border-bottom:2px dashed #EADFF3}
+/* 當月活動是另一張便條，和月曆分開釘 */
+.ml-card{margin-top:2.75rem;background:var(--butter);rotate:-.4deg}
+.month-list{margin:0}
+.month-list h4.ml-title{margin:0 0 .4rem;font-family:var(--font-hand);font-size:1.6rem}
+.month-list .event{box-shadow:none;background:none;border-radius:10px;padding:.7rem .4rem;border-bottom:2px dashed #EADBB0}
 .month-list .event:last-child{border-bottom:0}
-.month-list .event.today-ev{background:#F3ECFC}
+.month-list .event.today-ev{background:rgba(255,255,255,.7)}
+.month-list .day{background:#fff}
 .month-list .event.hol .day{background:var(--cherry)}
 .month-list .event.hol .day b,.month-list .event.hol .day small{color:#fff}
 .month-list .event .ag-tag{margin-left:.4rem}
@@ -848,8 +851,8 @@ function viewCalendar(){
       </table>
       <div class="cal-legend" aria-hidden="true"><span><i></i>活動</span><span><i class="holiday"></i>放假日</span></div>
       ${agenda}
-      ${monthList(y, m, fmt)}
-    </div>` });
+    </div>
+    <div class="cal ml-card">${pin()}${monthList(y, m, fmt)}</div>` });
 }
 function monthList(y, m, fmt){
   const mStart = new Date(y, m, 1), mEnd = new Date(y, m+1, 0);
