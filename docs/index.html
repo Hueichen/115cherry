@@ -296,6 +296,15 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .day small{font-size:.85rem;color:var(--plum-soft)}
 .event h4{margin:.1rem 0 0;font-size:1.1rem}
 .event p{margin:.15rem 0 0;color:var(--plum-soft);font-size:.98rem}
+/* 月曆下方：當月活動清單 */
+.month-list{margin-top:1.25rem;padding-top:1rem;border-top:2px dashed #EADFF3}
+.month-list h4.ml-title{margin:0 0 .3rem;font-family:var(--font-hand);font-size:1.35rem}
+.month-list .event{box-shadow:none;background:none;border-radius:10px;padding:.7rem .4rem;border-bottom:2px dashed #EADFF3}
+.month-list .event:last-child{border-bottom:0}
+.month-list .event.today-ev{background:#F3ECFC}
+.month-list .event.hol .day{background:var(--cherry)}
+.month-list .event.hol .day b,.month-list .event.hol .day small{color:#fff}
+.month-list .event .ag-tag{margin-left:.4rem}
 .tag{display:inline-block;margin-left:.4rem;font-size:.8rem;font-weight:700;color:#fff;background:var(--cherry);padding:.05rem .55rem;border-radius:999px;vertical-align:.15em}
 .text-btn{border:0;background:none;font:inherit;color:var(--cherry);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:.5rem 0}
 
@@ -314,6 +323,21 @@ dialog.lightbox::backdrop{background:rgba(52,38,72,.82)}
 .lb-desc{text-align:center;color:var(--plum-soft);margin:.2rem 0 0}
 .lb-tools{display:flex;justify-content:center;gap:.75rem;margin-top:.75rem}
 
+/* 回到頁首：往下捲才出現，手機版縮小並貼在右下角 */
+.to-top{
+  position:fixed;right:max(1rem,env(safe-area-inset-right,0px));bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:40;
+  width:48px;height:48px;border-radius:50%;border:2px solid var(--lilac);background:rgba(255,253,247,.92);
+  color:var(--plum);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px -4px rgba(67,52,90,.4);
+  opacity:0;visibility:hidden;translate:0 8px;transition:opacity .2s,translate .2s,visibility .2s;
+}
+.to-top.show{opacity:1;visibility:visible;translate:0 0}
+.to-top:hover{background:var(--blush)}
+.to-top svg{width:20px;height:20px}
+@media (max-width:640px){
+  .to-top{width:40px;height:40px;right:.6rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));opacity:0;border-width:1.5px}
+  .to-top.show{opacity:.85}
+  .to-top svg{width:17px;height:17px}
+}
 footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--plum-soft);font-size:.9rem;text-align:center}
 
 @media (max-width:640px){
@@ -366,7 +390,7 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
 }
 @media print{
   body{background:#fff}
-  .nav-wrap,.week-nav,.video-btn,.skip{display:none}
+  .nav-wrap,.week-nav,.video-btn,.skip,.to-top{display:none}
   .corkboard{background:#fff;box-shadow:none;border-width:2px}
   .note{box-shadow:none;border:1px solid #ccc;rotate:0deg!important}
 }
@@ -407,6 +431,10 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
 <footer>
   <p id="foot">115櫻桃班 幼幼班</p>
 </footer>
+
+<button class="to-top" id="to-top" type="button" aria-label="回到頁首">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 
 <dialog class="lightbox" id="lightbox" aria-label="相片檢視">
   <div class="lb-inner">
@@ -820,7 +848,32 @@ function viewCalendar(){
       </table>
       <div class="cal-legend" aria-hidden="true"><span><i></i>活動</span><span><i class="holiday"></i>放假日</span></div>
       ${agenda}
+      ${monthList(y, m, fmt)}
     </div>` });
+}
+function monthList(y, m, fmt){
+  const mStart = new Date(y, m, 1), mEnd = new Date(y, m+1, 0);
+  const list = DATA.calendar.map(e => {
+      const s = toDate(e['日期']); if (!s) return null;
+      let end = toDate(e['結束日期']); if (!end || end < s) end = s;
+      return { ...e, s, end };
+    })
+    .filter(e => e && e.s <= mEnd && e.end >= mStart)
+    .sort((a, b) => a.s - b.s || a.end - b.end);
+  const items = list.map(e => {
+    const past = e.end < TODAY, now = e.s <= TODAY && e.end >= TODAY;
+    const cls = ['event', past && 'past', now && 'today-ev', isHoliday(e) && 'hol'].filter(Boolean).join(' ');
+    return `<li class="${cls}">
+      <span class="day"><b>${e.s.getDate()}</b><small>${e.s.getMonth() !== m ? `${e.s.getMonth()+1}月・` : ''}週${WEEKDAY[e.s.getDay()]}</small></span>
+      <div><h4>${esc(e['活動'])}${isHoliday(e) ? '<span class="ag-tag">放假</span>' : ''}${now ? '<span class="tag">今天</span>' : ''}</h4>
+        ${e.end > e.s ? `<p>${fmt(e.s)} 至 ${fmt(e.end)}</p>` : ''}
+        ${e['備註'] ? `<p>${esc(e['備註'])}</p>` : ''}</div>
+    </li>`;
+  }).join('');
+  return `<section class="month-list" aria-label="${m+1} 月所有活動">
+    <h4 class="ml-title">${m+1} 月活動</h4>
+    ${items ? `<ul class="events">${items}</ul>` : '<p class="empty">這個月沒有活動。</p>'}
+  </section>`;
 }
 function calGo(date, focus){
   calSel = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -929,6 +982,21 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('change', e => {
 });
+
+/* ---------- 回到頁首 ---------- */
+(() => {
+  const btn = $('#to-top');
+  let ticking = false;
+  const update = () => { btn.classList.toggle('show', window.scrollY > window.innerHeight * 0.8); ticking = false; };
+  window.addEventListener('scroll', () => { if (!ticking){ ticking = true; requestAnimationFrame(update); } }, { passive:true });
+  btn.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top:0, behavior: reduce ? 'auto' : 'smooth' });
+    const t = document.querySelector('.page-title') || $('#main');
+    t.focus({ preventScroll:true });            // 鍵盤與報讀軟體使用者回到頁面開頭
+  });
+  update();
+})();
 
 /* ---------- 燈箱 ---------- */
 let lbList = [], lbPos = 0, lbReturn = null;
