@@ -253,6 +253,10 @@ main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 3rem}
 .photo button{all:unset;cursor:zoom-in;display:block;width:100%}
 .photo button:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
 .photo img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--bg)}
+.photos.big{grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:1.75rem}
+.photos.big .photo{padding:.7rem .7rem .8rem}
+.photos.big .photo img{aspect-ratio:auto;max-height:70vh;object-fit:contain;background:#fff}
+.photos.big .photo figcaption{font-size:1.15rem}
 .photo figcaption{font-family:var(--font-hand);font-size:1rem;text-align:center;margin-top:.35rem;line-height:1.4}
 .gallery-group{margin-bottom:2.5rem}
 .gallery-group h3{font-family:var(--font-hand);font-size:1.4rem;margin:0 0 1rem}
@@ -386,6 +390,7 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
   .week-nav nav{flex:1}
   .cork-tabs{margin-left:0;width:100%}
   .photos{grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}
+  .photos.big{grid-template-columns:minmax(0,1fr);gap:1.4rem}
   .board{gap:2.25rem}
 }
 @media (prefers-reduced-motion:reduce){
@@ -460,7 +465,7 @@ footer{max-width:1080px;margin:0 auto;padding:1rem 1.25rem 2.5rem;color:var(--pl
    ========================================================= */
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbz2fBFwxKLy3I0cscudaUJqj8sNha9XrGMLmn4FMtmPCqrikAnVJLBKJjz7LCfX42kF/exec',
-  SHOW_GALLERY: false,  // 主選單的「櫻桃畫廊」：true 顯示、false 隱藏（週報裡的畫廊不受影響）
+  SHOW_GALLERY: true,   // 主選單的「櫻桃畫廊」：true 顯示、false 隱藏（週報裡的畫廊不受影響）
   GA_ID: 'G-7217Q3SV2K'             // Google Analytics 評估 ID，例如 'G-ABC123XYZ'；留空白就不追蹤
 };
 
@@ -681,7 +686,7 @@ function songCard(s, kind, color){
   const vid = youtubeId(s['影片網址']);
   const video = vid
     ? `<button class="video-btn" type="button" data-yt="${vid}" data-title="${esc(s['名稱'])}">▶ 播放影片</button>`
-    : (s['影片網址'] ? `<p><a href="${esc(s['影片網址'])}" target="_blank" rel="noopener">觀看影片</a></p>` : '');
+    : (/^https?:\/\//i.test(s['影片網址'] || '') ? `<p><a href="${esc(s['影片網址'].trim())}" target="_blank" rel="noopener">觀看影片</a></p>` : '');   // 只接受 http/https 網址
   return `<article class="note ${color}">${pin()}
     <h3>${esc(s['名稱'])}</h3>
     <p class="meta">${kind}${s['週次'] ? `，第 ${esc(s['週次'])} 週` : ''}</p>
@@ -703,9 +708,9 @@ function checkLyrics(){
 let resizeTimer;
 window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(checkLyrics, 200); });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(checkLyrics);
-function photoList(list){
+function photoList(list, size = ''){
   if (!list.length) return '<p class="empty">這週還沒有放上照片。</p>';
-  return `<ul class="photos">${list.map(p => `<li><figure class="photo">
+  return `<ul class="photos ${size}">${list.map(p => `<li><figure class="photo">
       <button type="button" data-photo="${DATA.gallery.indexOf(p)}" aria-label="放大觀看：${esc(p['標題'])}">
         <img src="${esc(imageUrl(p['圖片網址']))}" alt="${esc(p['標題'])}" loading="lazy" referrerpolicy="no-referrer" data-kind="photo"></button>
       <figcaption>${esc(p['標題'])}</figcaption></figure></li>`).join('')}</ul>`;
@@ -743,7 +748,7 @@ function weekBoard(w, photos, songs, rhymes, books){
   const parts = [];
   if (w['櫻桃成長記']) parts.push(`<article class="note wide">${pin()}<h3>櫻桃成長記</h3><div class="prose">${rich(w['櫻桃成長記'])}</div></article>`);
   if (w['櫻桃小須知']) parts.push(`<article class="note wide butter">${pin()}<h3>櫻桃小須知</h3><div class="prose">${rich(w['櫻桃小須知'])}</div></article>`);
-  if (photos.length)   parts.push(`<article class="note wide mint">${pin()}<h3>櫻桃畫廊</h3>${photoList(photos)}</article>`);
+  if (photos.length)   parts.push(`<article class="note wide mint">${pin()}<h3>櫻桃畫廊</h3>${photoList(photos, 'big')}</article>`);
   songs.forEach(x  => parts.push(songCard(x,'兒歌','blush')));
   rhymes.forEach(x => parts.push(songCard(x,'手指謠','')));
   if (books.length)    parts.push(`<article class="note wide lilac">${pin()}<h3>櫻桃書櫃</h3><ul class="books">${books.map(bookItem).join('')}</ul></article>`);
